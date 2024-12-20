@@ -1,5 +1,5 @@
 pub fn name() -> &'static str {
-    "ChatGPT 20 Dec 2024"
+    "GPT-4-turbo 20 Dec 2024"
 }
 
 // ChatGPT on 10 Dec 2024

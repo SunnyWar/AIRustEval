@@ -24,9 +24,9 @@ fn main() {
     let module1_speedup = baseline_result.1 as f64 / module1_result.1 as f64;
     let module2_speedup = baseline_result.1 as f64 / module2_result.1 as f64;
 
-    println!("{:<25} | {:<15} | {:<20} | {:<10}", "Module", "Result", "Time (ns)", "Speedup");
+    println!("{:<30} | {:<15} | {:<20} | {:<10}", "Module", "Result", "Time (ns)", "Speedup");
     println!("{:-<60}", "");
-    println!("{:<25} | {:<15} | {:<20} | {:<10}", baseline::name(), baseline_result.0, baseline_result.1, "Baseline");
-    println!("{:<25} | {:<15} | {:<20} | {:.2}x", module1::name(), module1_result.0, module1_result.1, module1_speedup);
-    println!("{:<25} | {:<15} | {:<20} | {:.2}x", module2::name(), module2_result.0, module2_result.1, module2_speedup);
+    println!("{:<30} | {:<15} | {:<20} | {:<10}", baseline::name(), baseline_result.0, baseline_result.1, "Baseline");
+    println!("{:<30} | {:<15} | {:<20} | {:.2}x", module1::name(), module1_result.0, module1_result.1, module1_speedup);
+    println!("{:<30} | {:<15} | {:<20} | {:.2}x", module2::name(), module2_result.0, module2_result.1, module2_speedup);
 }
