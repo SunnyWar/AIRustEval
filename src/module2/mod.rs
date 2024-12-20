@@ -2,29 +2,21 @@ pub fn name() -> &'static str {
     "GPT-4-turbo 20 Dec 2024"
 }
 
-// ChatGPT on 10 Dec 2024
-pub fn process(input: i32) -> i32 {
-    // Use a memoized Fibonacci implementation for efficiency.
-    fn fibonacci(n: i32, memo: &mut Vec<i32>) -> i32 {
-        if n < memo.len() as i32 {
-            return memo[n as usize];
-        }
-        let value = fibonacci(n - 1, memo) + fibonacci(n - 2, memo);
-        memo.push(value);
-        value
+#[inline(never)]
+pub fn fibonacci(n: i32) -> i32 {
+    if n <= 1 {
+        return n;
     }
 
-    let mut memo = vec![0, 1]; // Initialize the Fibonacci sequence with base cases.
-    let mut result = 0;
+    let mut prev = 0;
+    let mut current = 1;
 
-    for i in 0..input {
-        let fib_i = fibonacci(i, &mut memo);
-        result += fib_i;
-        for j in 0..i {
-            let fib_j = fibonacci(j, &mut memo);
-            result += j * fib_j;
-        }
+    for _ in 2..=n {
+        let next = prev + current;
+        prev = current;
+        current = next;
     }
 
-    result
+    current
 }
+
