@@ -1,7 +1,8 @@
+mod baseline;
 mod module1;
 mod module2;
-mod baseline;
 
+use std::cell::UnsafeCell;
 use std::time::Instant;
 
 /// Times the execution of a function with the given input and prevents compiler optimization.
@@ -13,8 +14,8 @@ use std::time::Instant;
 /// timing results.
 ///
 /// # Parameters
-/// - `f`: The function to be timed, which takes an `i32` as input and returns an `i32`.
-/// - `input`: The input value to be passed to the function.
+/// - `f`: The function to be timed, which takes two `&str` inputs and returns a `usize`.
+/// - `input1`, `input2`: The input values to be passed to the function.
 ///
 /// # Returns
 /// A tuple containing the result of the function execution and the elapsed time in nanoseconds.
@@ -25,36 +26,85 @@ use std::time::Instant;
 ///
 /// # Example
 /// ```
-/// let (result, duration) = time_function(baseline::fibonacci, 42);
+/// let (result, duration) = time_function(baseline::levenshtein_distance, "kitten", "sitting");
 /// println!("Result: {}, Time: {} ns", result, duration);
 /// ```
 #[inline(never)]
-pub fn time_function<F>(f: F, input: i32) -> (i32, u128)
+pub fn time_function<F>(f: F, input1: &str, input2: &str) -> (usize, u128)
 where
-    F: Fn(i32) -> i32,
+    F: Fn(&str, &str) -> usize,
 {
     let start = Instant::now();
-    let mut result = f(input);
+    let result = f(input1, input2);
     let duration = start.elapsed();
+    let result_cell = UnsafeCell::new(result);
     unsafe {
-        std::ptr::write_volatile(&mut result as *mut i32, result);
+        std::ptr::write_volatile(result_cell.get(), result);
     }
     (result, duration.as_nanos())
 }
 
 fn main() {
-    let input = 46; // largest possible or the result overflows
+    let input1 = "To be, or not to be, that is the question:
+                        Whether 'tis nobler in the mind to suffer
+                        The slings and arrows of outrageous fortune,
+                        Or to take arms against a sea of troubles,
+                        And by opposing end them: to die, to sleep
+                        No more; and by a sleep, to say we end
+                        The heart-ache, and the thousand natural shocks";
 
-    let baseline_result = time_function(baseline::fibonacci, input);
-    let module1_result = time_function(module1::fibonacci, input);
-    let module2_result = time_function(module2::fibonacci, input);
+    let input2 = "That Flesh is heir to? 'Tis a consummation
+                        Devoutly to be wished. To die, to sleep,
+                        To sleep, perchance to Dream; aye, there's the rub,
+                        For in that sleep of death, what dreams may come,
+                        When we have shuffled off this mortal coil,
+                        Must give us pause. There's the respect
+                        That makes Calamity of so long life:
+                        For who would bear the Whips and Scorns of time,";
+
+    let baseline_result = time_function(
+        |s1, s2| baseline::levenshtein_distance(s1.as_bytes(), s2.as_bytes()),
+        input1,
+        input2,
+    );
+    let module1_result = time_function(
+        |s1, s2| module1::levenshtein_distance(s1.as_bytes(), s2.as_bytes()),
+        input1,
+        input2,
+    );
+    let module2_result = time_function(
+        |s1, s2| module2::levenshtein_distance(s1.as_bytes(), s2.as_bytes()),
+        input1,
+        input2,
+    );
 
     let module1_speedup = baseline_result.1 as f64 / module1_result.1 as f64;
     let module2_speedup = baseline_result.1 as f64 / module2_result.1 as f64;
 
-    println!("{:<30} | {:<15} | {:<20} | {:<10}", "Module", "Result", "Time (ns)", "Speedup");
+    println!(
+        "{:<30} | {:<15} | {:<20} | {:<10}",
+        "Module", "Result", "Time (ns)", "Speedup"
+    );
     println!("{:-<75}", "");
-    println!("{:<30} | {:<15} | {:<20} | {:<10}", baseline::name(), baseline_result.0, baseline_result.1, "Baseline");
-    println!("{:<30} | {:<15} | {:<20} | {:.2}x", module1::name(), module1_result.0, module1_result.1, module1_speedup);
-    println!("{:<30} | {:<15} | {:<20} | {:.2}x", module2::name(), module2_result.0, module2_result.1, module2_speedup);
+    println!(
+        "{:<30} | {:<15} | {:<20} | {:<10}",
+        baseline::name(),
+        baseline_result.0,
+        baseline_result.1,
+        "Baseline"
+    );
+    println!(
+        "{:<30} | {:<15} | {:<20} | {:.2}x",
+        module1::name(),
+        module1_result.0,
+        module1_result.1,
+        module1_speedup
+    );
+    println!(
+        "{:<30} | {:<15} | {:<20} | {:.2}x",
+        module2::name(),
+        module2_result.0,
+        module2_result.1,
+        module2_speedup
+    );
 }
