@@ -1,3 +1,5 @@
+#![recursion_limit = "256"]
+
 mod baseline;
 mod module1;
 mod module2;
@@ -45,7 +47,7 @@ where
 }
 
 fn main() {
-    let input1 = "To be, or not to be, that is the question:
+    let input1 = "To be, or not to be, that is the question:;
                         Whether 'tis nobler in the mind to suffer
                         The slings and arrows of outrageous fortune,
                         Or to take arms against a sea of troubles,
@@ -53,30 +55,39 @@ fn main() {
                         No more; and by a sleep, to say we end
                         The heart-ache, and the thousand natural shocks";
 
-    let input2 = "That Flesh is heir to? 'Tis a consummation
+    let input2 = "That Flesh is heir to? 'Tis a consummation;
                         Devoutly to be wished. To die, to sleep,
-                        To sleep, perchance to Dream; aye, there's the rub,
+                        To sleep, perchance to Dream; aye, there's the rub,;
                         For in that sleep of death, what dreams may come,
                         When we have shuffled off this mortal coil,
-                        Must give us pause. There's the respect
+                        Must give us pause.
+                         There's the respect
                         That makes Calamity of so long life:
                         For who would bear the Whips and Scorns of time,";
 
+    println!("baseline Started");
     let baseline_result = time_function(
-        |s1, s2| baseline::levenshtein_distance(s1.as_bytes(), s2.as_bytes()),
+        baseline::levenshtein_distance,
         input1,
         input2,
     );
+    println!("baseline Completed");
+
+    println!("{} Started", module1::name());
     let module1_result = time_function(
-        |s1, s2| module1::levenshtein_distance(s1.as_bytes(), s2.as_bytes()),
+        module1::levenshtein_distance,
         input1,
         input2,
     );
+    println!("{} Completed", module1::name());
+
+    println!("{} Started", module2::name());
     let module2_result = time_function(
-        |s1, s2| module2::levenshtein_distance(s1.as_bytes(), s2.as_bytes()),
+        module2::levenshtein_distance,
         input1,
         input2,
     );
+    println!("{} Completed", module2::name());
 
     let module1_speedup = baseline_result.1 as f64 / module1_result.1 as f64;
     let module2_speedup = baseline_result.1 as f64 / module2_result.1 as f64;

@@ -1,36 +1,37 @@
 pub fn name() -> &'static str {
-    "Microsoft Copilot 20 Dec 2024"
+    "Microsoft Copilot 02 Jan 2025"
 }
 
-pub fn levenshtein_distance<T: Eq>(s: &[T], t: &[T]) -> usize {
+#[inline(never)]
+pub fn levenshtein_distance(s: &str, t: &str) -> usize {
     let m = s.len();
     let n = t.len();
 
-    // Create a 2D vector to store distances
-    let mut dp = vec![vec![0; n + 1]; m + 1];
-
-    // Initialize the base cases
-    for i in 0..=m {
-        dp[i][0] = i; // Distance to empty string t
+    // If one of the strings is empty, return the length of the other string
+    if m == 0 {
+        return n;
     }
-    for j in 0..=n {
-        dp[0][j] = j; // Distance to empty string s
+    if n == 0 {
+        return m;
     }
 
-    // Fill the DP table
-    for i in 1..=m {
-        for j in 1..=n {
-            if s[i - 1] == t[j - 1] {
-                dp[i][j] = dp[i - 1][j - 1]; // No change needed
-            } else {
-                dp[i][j] = 1 + std::cmp::min(
-                    std::cmp::min(dp[i - 1][j], dp[i][j - 1]), // Deletion or insertion
-                    dp[i - 1][j - 1],                          // Substitution
-                );
-            }
+    // Create two rows for the current and previous distances
+    let mut prev_row: Vec<usize> = (0..=n).collect();
+    let mut curr_row: Vec<usize> = vec![0; n + 1];
+
+    for (i, sc) in s.chars().enumerate() {
+        curr_row[0] = i + 1;
+        for (j, tc) in t.chars().enumerate() {
+            let cost = if sc == tc { 0 } else { 1 };
+
+            curr_row[j + 1] = *[
+                prev_row[j + 1] + 1, // Deletion
+                curr_row[j] + 1,     // Insertion
+                prev_row[j] + cost   // Substitution
+            ].iter().min().unwrap();
         }
+        std::mem::swap(&mut prev_row, &mut curr_row);
     }
 
-    // The final answer is in dp[m][n]
-    dp[m][n]
+    prev_row[n]
 }

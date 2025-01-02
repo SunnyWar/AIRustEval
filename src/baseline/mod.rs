@@ -3,31 +3,38 @@ pub fn name() -> &'static str {
 }
 
 #[inline(never)]
-pub fn levenshtein_distance<T: Eq>(s: &[T], t: &[T]) -> usize {
-    // If s is empty, the distance is the number of characters in t
-    if s.is_empty() {
-        return t.len();
+pub fn levenshtein_distance(s: &str, t: &str) -> usize {
+    let m = s.len();
+    let n = t.len();
+
+    // Create a 2D matrix to store the distances
+    let mut matrix = vec![vec![0; n + 1]; m + 1];
+
+    // Initialize the first row and column of the matrix
+    for i in 0..=m {
+        matrix[i][0] = i;
+    }
+    for j in 0..=n {
+        matrix[0][j] = j;
     }
 
-    // If t is empty, the distance is the number of characters in s
-    if t.is_empty() {
-        return s.len();
+    // Compute the Levenshtein distance
+    for i in 1..=m {
+        for j in 1..=n {
+            let cost = if s.chars().nth(i - 1) == t.chars().nth(j - 1) {
+                0 // No cost if characters are the same
+            } else {
+                1 // Cost of 1 if characters are different
+            };
+
+            matrix[i][j] = *[
+                matrix[i - 1][j] + 1,    // Deletion
+                matrix[i][j - 1] + 1,    // Insertion
+                matrix[i - 1][j - 1] + cost // Substitution
+            ].iter().min().unwrap();
+        }
     }
 
-    let (a, s_prime) = s.split_first().unwrap();
-    let (b, t_prime) = t.split_first().unwrap();
-
-    if a == b {
-        // If the first characters are the same, they can be ignored
-        levenshtein_distance(s_prime, t_prime)
-    } else {
-        // Otherwise try all three possible actions and select the best one
-        1 + std::cmp::min(
-            std::cmp::min(
-                levenshtein_distance(s_prime, t), // Character is deleted (a deleted)
-                levenshtein_distance(s, t_prime), // Character is inserted (b inserted)
-            ),
-            levenshtein_distance(s_prime, t_prime), // Character is replaced (a replaced with b)
-        )
-    }
+    // The last element of the matrix is the Levenshtein distance
+    matrix[m][n]
 }
