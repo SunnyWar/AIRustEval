@@ -66,27 +66,15 @@ fn main() {
                         For who would bear the Whips and Scorns of time,";
 
     println!("baseline Started");
-    let baseline_result = time_function(
-        baseline::levenshtein_distance,
-        input1,
-        input2,
-    );
+    let baseline_result = time_function(baseline::levenshtein_distance, input1, input2);
     println!("baseline Completed");
 
     println!("{} Started", module1::name());
-    let module1_result = time_function(
-        module1::levenshtein_distance,
-        input1,
-        input2,
-    );
+    let module1_result = time_function(module1::levenshtein_distance, input1, input2);
     println!("{} Completed", module1::name());
 
     println!("{} Started", module2::name());
-    let module2_result = time_function(
-        module2::levenshtein_distance,
-        input1,
-        input2,
-    );
+    let module2_result = time_function(module2::levenshtein_distance, input1, input2);
     println!("{} Completed", module2::name());
 
     let module1_speedup = baseline_result.1 as f64 / module1_result.1 as f64;

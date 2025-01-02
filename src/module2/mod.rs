@@ -32,9 +32,9 @@ pub fn levenshtein_distance(s: &str, t: &str) -> usize {
             };
 
             curr_row[j] = *[
-                prev_row[j] + 1,       // Deletion
-                curr_row[j - 1] + 1,   // Insertion
-                prev_row[j - 1] + cost // Substitution
+                prev_row[j] + 1,        // Deletion
+                curr_row[j - 1] + 1,    // Insertion
+                prev_row[j - 1] + cost, // Substitution
             ]
             .iter()
             .min()

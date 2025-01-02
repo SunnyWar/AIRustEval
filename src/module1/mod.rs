@@ -27,8 +27,11 @@ pub fn levenshtein_distance(s: &str, t: &str) -> usize {
             curr_row[j + 1] = *[
                 prev_row[j + 1] + 1, // Deletion
                 curr_row[j] + 1,     // Insertion
-                prev_row[j] + cost   // Substitution
-            ].iter().min().unwrap();
+                prev_row[j] + cost,  // Substitution
+            ]
+            .iter()
+            .min()
+            .unwrap();
         }
         std::mem::swap(&mut prev_row, &mut curr_row);
     }

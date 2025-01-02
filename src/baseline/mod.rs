@@ -28,10 +28,13 @@ pub fn levenshtein_distance(s: &str, t: &str) -> usize {
             };
 
             matrix[i][j] = *[
-                matrix[i - 1][j] + 1,    // Deletion
-                matrix[i][j - 1] + 1,    // Insertion
-                matrix[i - 1][j - 1] + cost // Substitution
-            ].iter().min().unwrap();
+                matrix[i - 1][j] + 1,        // Deletion
+                matrix[i][j - 1] + 1,        // Insertion
+                matrix[i - 1][j - 1] + cost, // Substitution
+            ]
+            .iter()
+            .min()
+            .unwrap();
         }
     }
 
