@@ -18,11 +18,11 @@ TODO:
 that AI's find difficul to optimize.
 - an example of hyper-optimized code that the AI has little hope of making better. 
 
-Results to date:
+## Results to date:
 
-Module                         | Result          | Time (ns)            | Speedup
----------------------------------------------------------------------------
-Baseline                       | 306             | 24243400             | Baseline
-Microsoft Copilot 02 Jan 2025  | 306             | 320100               | 75.74x
-GPT-4-turbo 2 Jan 2025         | 306             | 388900               | 62.34x
+| Module                        | Result | Time (ns) | Speedup  |
+|-------------------------------|--------|-----------|----------|
+| Baseline                      | 306    | 24243400  | Baseline |
+| Microsoft Copilot 02 Jan 2025 | 306    | 320100    | 75.74x   |
+| GPT-4-turbo 2 Jan 2025        | 306    | 388900    | 62.34x   |
 
