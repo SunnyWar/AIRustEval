@@ -3,6 +3,7 @@
 mod baseline;
 mod module1;
 mod module2;
+mod module3;
 
 use std::cell::UnsafeCell;
 use std::time::Instant;
@@ -46,8 +47,30 @@ where
     (result, duration.as_nanos())
 }
 
+fn print_sorted_results(results: Vec<(&str, usize, u128, String)>) {
+    let mut sorted_results = results;
+
+    // Sort results by time (descending)
+    sorted_results.sort_by(|a, b| b.2.cmp(&a.2));
+
+    // Print header
+    println!(
+        "| {:<30} | {:<15} | {:<20} | {:<10}",
+        " Module", "Result", "Time (ns)", "Speedup"
+    );
+    println!("{:-<75}", "");
+
+    // Print sorted results
+    for result in sorted_results {
+        println!(
+            "| {:<30} | {:<15} | {:<20} | {:<10}",
+            result.0, result.1, result.2, result.3
+        );
+    }
+}
+
 fn main() {
-    let input1 = "To be, or not to be, that is the question:;
+    let input1 = "To be, or not to be, that is the question:
                         Whether 'tis nobler in the mind to suffer
                         The slings and arrows of outrageous fortune,
                         Or to take arms against a sea of troubles,
@@ -55,9 +78,9 @@ fn main() {
                         No more; and by a sleep, to say we end
                         The heart-ache, and the thousand natural shocks";
 
-    let input2 = "That Flesh is heir to? 'Tis a consummation;
+    let input2 = "That Flesh is heir to? 'Tis a consummation:
                         Devoutly to be wished. To die, to sleep,
-                        To sleep, perchance to Dream; aye, there's the rub,;
+                        To sleep, perchance to Dream; aye, there's the rub;
                         For in that sleep of death, what dreams may come,
                         When we have shuffled off this mortal coil,
                         Must give us pause.
@@ -65,45 +88,22 @@ fn main() {
                         That makes Calamity of so long life:
                         For who would bear the Whips and Scorns of time,";
 
-    println!("baseline Started");
     let baseline_result = time_function(baseline::levenshtein_distance, input1, input2);
-    println!("baseline Completed");
-
-    println!("{} Started", module1::name());
     let module1_result = time_function(module1::levenshtein_distance, input1, input2);
-    println!("{} Completed", module1::name());
-
-    println!("{} Started", module2::name());
     let module2_result = time_function(module2::levenshtein_distance, input1, input2);
-    println!("{} Completed", module2::name());
+    let module3_result = time_function(module3::levenshtein_distance, input1, input2);
 
     let module1_speedup = baseline_result.1 as f64 / module1_result.1 as f64;
     let module2_speedup = baseline_result.1 as f64 / module2_result.1 as f64;
+    let module3_speedup = baseline_result.1 as f64 / module3_result.1 as f64;
 
-    println!(
-        "{:<30} | {:<15} | {:<20} | {:<10}",
-        "Module", "Result", "Time (ns)", "Speedup"
-    );
-    println!("{:-<75}", "");
-    println!(
-        "{:<30} | {:<15} | {:<20} | {:<10}",
-        baseline::name(),
-        baseline_result.0,
-        baseline_result.1,
-        "Baseline"
-    );
-    println!(
-        "{:<30} | {:<15} | {:<20} | {:.2}x",
-        module1::name(),
-        module1_result.0,
-        module1_result.1,
-        module1_speedup
-    );
-    println!(
-        "{:<30} | {:<15} | {:<20} | {:.2}x",
-        module2::name(),
-        module2_result.0,
-        module2_result.1,
-        module2_speedup
-    );
+    let results = vec![
+        (baseline::name(), baseline_result.0, baseline_result.1, "Baseline".to_string()),
+        (module1::name(), module1_result.0, module1_result.1, format!("{:.2}x", module1_speedup)),
+        (module2::name(), module2_result.0, module2_result.1, format!("{:.2}x", module2_speedup)),
+        (module3::name(), module3_result.0, module3_result.1, format!("{:.2}x", module3_speedup)),
+        // Add more modules here as needed
+    ];
+
+    print_sorted_results(results);
 }

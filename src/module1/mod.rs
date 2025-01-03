@@ -1,5 +1,5 @@
 pub fn name() -> &'static str {
-    "Microsoft Copilot 02 Jan 2025"
+    "Microsoft Copilot 2 Jan 2025"
 }
 
 #[inline(never)]

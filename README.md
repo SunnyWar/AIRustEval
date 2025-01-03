@@ -20,9 +20,11 @@ that AI's find difficul to optimize.
 
 ## Results to date:
 
-| Module                        | Result | Time (ns) | Speedup  |
-|-------------------------------|--------|-----------|----------|
-| Baseline                      | 306    | 24243400  | Baseline |
-| Microsoft Copilot 02 Jan 2025 | 306    | 320100    | 75.74x   |
-| GPT-4-turbo 2 Jan 2025        | 306    | 388900    | 62.34x   |
+|  Module                        | Result          | Time (ns)            | Speedup
+---------------------------------------------------------------------------
+| Baseline                       | 305             | 24138500             | Baseline
+| syntha.ai 2 Jan 2025           | 303             | 22798400             | 1.06x
+| GPT-4-turbo 2 Jan 2025         | 305             | 354100               | 68.17x
+| Microsoft Copilot 2 Jan 2025   | 305             | 345600               | 69.85x
+
 
