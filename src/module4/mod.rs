@@ -1,5 +1,10 @@
-pub fn name() -> &'static str {
-    "gemini 2.0 Flash 2 Jan 2025"
+use chrono::NaiveDate;
+
+pub fn name() -> (&'static str, NaiveDate) {
+    (
+        "gemini 2.0 Flash",
+        NaiveDate::from_ymd_opt(2024, 1, 2).unwrap(),
+    )
 }
 
 #[inline(never)]

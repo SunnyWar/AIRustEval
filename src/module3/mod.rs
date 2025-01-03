@@ -1,5 +1,7 @@
-pub fn name() -> &'static str {
-    "syntha.ai 2 Jan 2025"
+use chrono::NaiveDate;
+
+pub fn name() -> (&'static str, NaiveDate) {
+    ("syntha.ai", NaiveDate::from_ymd_opt(2024, 1, 2).unwrap())
 }
 
 #[inline(never)]
@@ -20,10 +22,13 @@ pub fn levenshtein_distance(s: &str, t: &str) -> usize {
                     1
                 };
                 dp[i][j] = *[
-                    dp[i - 1][j] + 1,      // Deletion
-                    dp[i][j - 1] + 1,      // Insertion
+                    dp[i - 1][j] + 1,        // Deletion
+                    dp[i][j - 1] + 1,        // Insertion
                     dp[i - 1][j - 1] + cost, // Substitution
-                ].iter().min().unwrap();
+                ]
+                .iter()
+                .min()
+                .unwrap();
             }
         }
     }

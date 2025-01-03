@@ -7,33 +7,10 @@ mod module3;
 mod module4;
 mod module5;
 
+use chrono::NaiveDate;
 use std::cell::UnsafeCell;
 use std::time::Instant;
 
-/// Times the execution of a function with the given input and prevents compiler optimization.
-///
-/// This function measures the execution time of a function `f` with the provided `input`.
-/// The use of `#[inline(never)]` prevents the compiler from inlining the function, ensuring
-/// it gets executed as intended. Additionally, the `std::ptr::write_volatile` call is used
-/// to prevent the compiler from optimizing away the result computation, ensuring accurate
-/// timing results.
-///
-/// # Parameters
-/// - `f`: The function to be timed, which takes two `&str` inputs and returns a `usize`.
-/// - `input1`, `input2`: The input values to be passed to the function.
-///
-/// # Returns
-/// A tuple containing the result of the function execution and the elapsed time in nanoseconds.
-///
-/// # Safety
-/// The `std::ptr::write_volatile` call is used to force the compiler to recognize the result
-/// as being used, preventing any optimization that might otherwise skip the computation.
-///
-/// # Example
-/// ```
-/// let (result, duration) = time_function(baseline::levenshtein_distance, "kitten", "sitting");
-/// println!("Result: {}, Time: {} ns", result, duration);
-/// ```
 #[inline(never)]
 pub fn time_function<F>(f: F, input1: &str, input2: &str) -> (usize, u128)
 where
@@ -49,24 +26,24 @@ where
     (result, duration.as_nanos())
 }
 
-fn print_sorted_results(results: Vec<(&str, usize, u128, String)>) {
+fn print_sorted_results(results: Vec<(&str, NaiveDate, usize, u128, String)>) {
     let mut sorted_results = results;
 
     // Sort results by time (descending)
-    sorted_results.sort_by(|a, b| b.2.cmp(&a.2));
+    sorted_results.sort_by(|a, b| b.3.cmp(&a.3));
 
     // Print header
     println!(
-        "| {:<30} | {:<15} | {:<20} | {:<10}",
-        " Module", "Result", "Time (ns)", "Speedup"
+        "| {:<30} | {:<10} | {:<8} | {:<15} | {:<8} |",
+        "Module", "Date", "Result", "Time (ns)", "Speedup"
     );
-    println!("{:-<75}", "");
+    println!("{:-<88}", "");
 
     // Print sorted results
     for result in sorted_results {
         println!(
-            "| {:<30} | {:<15} | {:<20} | {:<10}",
-            result.0, result.1, result.2, result.3
+            "| {:<30} | {:<12} | {:<8} | {:<15} | {:<8} |",
+            result.0, result.1, result.2, result.3, result.4
         );
     }
 }
@@ -104,12 +81,48 @@ fn main() {
     let module5_speedup = baseline_result.1 as f64 / module5_result.1 as f64;
 
     let results = vec![
-        (baseline::name(), baseline_result.0, baseline_result.1, "Baseline".to_string()),
-        (module1::name(), module1_result.0, module1_result.1, format!("{:.2}x", module1_speedup)),
-        (module2::name(), module2_result.0, module2_result.1, format!("{:.2}x", module2_speedup)),
-        (module3::name(), module3_result.0, module3_result.1, format!("{:.2}x", module3_speedup)),
-        (module4::name(), module4_result.0, module4_result.1, format!("{:.2}x", module4_speedup)),
-        (module5::name(), module5_result.0, module5_result.1, format!("{:.2}x", module5_speedup)),
+        (
+            baseline::name().0,
+            baseline::name().1,
+            baseline_result.0,
+            baseline_result.1,
+            "-----".to_string(),
+        ),
+        (
+            module1::name().0,
+            module1::name().1,
+            module1_result.0,
+            module1_result.1,
+            format!("{:.2}x", module1_speedup),
+        ),
+        (
+            module2::name().0,
+            module2::name().1,
+            module2_result.0,
+            module2_result.1,
+            format!("{:.2}x", module2_speedup),
+        ),
+        (
+            module3::name().0,
+            module3::name().1,
+            module3_result.0,
+            module3_result.1,
+            format!("{:.2}x", module3_speedup),
+        ),
+        (
+            module4::name().0,
+            module4::name().1,
+            module4_result.0,
+            module4_result.1,
+            format!("{:.2}x", module4_speedup),
+        ),
+        (
+            module5::name().0,
+            module5::name().1,
+            module5_result.0,
+            module5_result.1,
+            format!("{:.2}x", module5_speedup),
+        ),
         // Add more modules here as needed
     ];
 
