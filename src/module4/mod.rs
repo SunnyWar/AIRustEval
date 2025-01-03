@@ -2,7 +2,7 @@ pub fn name() -> &'static str {
     "gemini 2.0 Flash 2 Jan 2025"
 }
 
-#[inline]
+#[inline(never)]
 pub fn levenshtein_distance(s: &str, t: &str) -> usize {
     if s.is_empty() {
         return t.len();
