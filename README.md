@@ -22,8 +22,9 @@ that AI's find difficul to optimize.
 
 |  Module                        | Result          | Time (ns)            | Speedup
 ---------------------------------------------------------------------------
-| Baseline                       | 305             | 19885700             | Baseline
-| syntha.ai 2 Jan 2025           | 303             | 19066300             | 1.04x
-| GPT-4-turbo 2 Jan 2025         | 305             | 317900               | 62.55x
-| Microsoft Copilot 2 Jan 2025   | 305             | 291700               | 68.17x
-| gemini 2.0 Flash 2 Jan 2025    | 305             | 272500               | 72.98x
+| Baseline                       | 305             | 20183400             | Baseline
+| syntha.ai 2 Jan 2025           | 303             | 19964600             | 1.01x
+| GPT-4-turbo 2 Jan 2025         | 305             | 321800               | 62.72x
+| Microsoft Copilot 2 Jan 2025   | 305             | 286400               | 70.47x
+| gemini 2.0 Flash 2 Jan 2025    | 305             | 276500               | 73.00x
+| claude 2 Jan 2025              | 305             | 271800               | 74.26x
