@@ -4,6 +4,7 @@ mod baseline;
 mod module1;
 mod module2;
 mod module3;
+mod module4;
 
 use std::cell::UnsafeCell;
 use std::time::Instant;
@@ -92,16 +93,19 @@ fn main() {
     let module1_result = time_function(module1::levenshtein_distance, input1, input2);
     let module2_result = time_function(module2::levenshtein_distance, input1, input2);
     let module3_result = time_function(module3::levenshtein_distance, input1, input2);
+    let module4_result = time_function(module4::levenshtein_distance, input1, input2);
 
     let module1_speedup = baseline_result.1 as f64 / module1_result.1 as f64;
     let module2_speedup = baseline_result.1 as f64 / module2_result.1 as f64;
     let module3_speedup = baseline_result.1 as f64 / module3_result.1 as f64;
+    let module4_speedup = baseline_result.1 as f64 / module4_result.1 as f64;
 
     let results = vec![
         (baseline::name(), baseline_result.0, baseline_result.1, "Baseline".to_string()),
         (module1::name(), module1_result.0, module1_result.1, format!("{:.2}x", module1_speedup)),
         (module2::name(), module2_result.0, module2_result.1, format!("{:.2}x", module2_speedup)),
         (module3::name(), module3_result.0, module3_result.1, format!("{:.2}x", module3_speedup)),
+        (module4::name(), module4_result.0, module4_result.1, format!("{:.2}x", module4_speedup)),
         // Add more modules here as needed
     ];
 
