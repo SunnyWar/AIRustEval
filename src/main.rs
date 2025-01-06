@@ -8,8 +8,31 @@ mod module4;
 mod module5;
 
 use chrono::NaiveDate;
+use core::fmt;
 use std::cell::UnsafeCell;
 use std::time::Instant;
+
+pub enum AICodeGenStatus {
+    Ok,
+    CompileError,
+    SecondTryOk,
+    SecondTryCompileError,
+    IncorrectResult
+}
+
+impl fmt::Display for AICodeGenStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let s = match self {
+            AICodeGenStatus::Ok => "Ok",
+            AICodeGenStatus::CompileError => "CompileError",
+            AICodeGenStatus::SecondTryOk => "SecondTryOk",
+            AICodeGenStatus::SecondTryCompileError => "SecondTryCompileError",
+            AICodeGenStatus::IncorrectResult => "IncorrectResult",
+        };
+        write!(f, "{}", s)
+    }
+}
+
 
 #[inline(never)]
 pub fn time_function<F>(f: F, input1: &str, input2: &str) -> (usize, u128)
@@ -26,7 +49,7 @@ where
     (result, duration.as_nanos())
 }
 
-fn print_sorted_results(results: Vec<(&str, NaiveDate, usize, u128, String)>) {
+fn print_sorted_results(results: Vec<(&str, NaiveDate, AICodeGenStatus, usize, u128, String)>) {
     let mut sorted_results = results;
 
     // Sort results by time (descending)
@@ -34,16 +57,16 @@ fn print_sorted_results(results: Vec<(&str, NaiveDate, usize, u128, String)>) {
 
     // Print header
     println!(
-        "| {:<30} | {:<10} | {:<8} | {:<15} | {:<8} |",
-        "Module", "Date", "Result", "Time (ns)", "Speedup"
+        "| {:<20} | {:<10} | {:<10} | {:<8} | {:<12} | {:<8} |",
+        "Module", "Date", "Status", "Result", "Time (ns)", "Speedup"
     );
     println!("{:-<88}", "");
 
     // Print sorted results
     for result in sorted_results {
         println!(
-            "| {:<30} | {:<12} | {:<8} | {:<15} | {:<8} |",
-            result.0, result.1, result.2, result.3, result.4
+            "| {:<20} | {:<12} | {:<10} | {:<8} | {:<12} | {:<8} |",
+            result.0, result.1, format!("{}", result.2), result.3, result.4, result.5
         );
     }
 }
@@ -84,6 +107,7 @@ fn main() {
         (
             baseline::name().0,
             baseline::name().1,
+            baseline::name().2,
             baseline_result.0,
             baseline_result.1,
             "-----".to_string(),
@@ -91,6 +115,7 @@ fn main() {
         (
             module1::name().0,
             module1::name().1,
+            module5::name().2,
             module1_result.0,
             module1_result.1,
             format!("{:.2}x", module1_speedup),
@@ -98,6 +123,7 @@ fn main() {
         (
             module2::name().0,
             module2::name().1,
+            module5::name().2,
             module2_result.0,
             module2_result.1,
             format!("{:.2}x", module2_speedup),
@@ -105,6 +131,7 @@ fn main() {
         (
             module3::name().0,
             module3::name().1,
+            module5::name().2,
             module3_result.0,
             module3_result.1,
             format!("{:.2}x", module3_speedup),
@@ -112,6 +139,7 @@ fn main() {
         (
             module4::name().0,
             module4::name().1,
+            module5::name().2,
             module4_result.0,
             module4_result.1,
             format!("{:.2}x", module4_speedup),
@@ -119,6 +147,7 @@ fn main() {
         (
             module5::name().0,
             module5::name().1,
+            module5::name().2,
             module5_result.0,
             module5_result.1,
             format!("{:.2}x", module5_speedup),
