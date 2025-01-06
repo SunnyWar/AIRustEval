@@ -5,7 +5,8 @@ use crate::AICodeGenStatus;
 pub fn name() -> (&'static str, NaiveDate, AICodeGenStatus) {
     (
         "Microsoft Copilot",
-        NaiveDate::from_ymd_opt(2024, 1, 2).unwrap(), AICodeGenStatus::Ok
+        NaiveDate::from_ymd_opt(2024, 1, 2).unwrap(),
+        AICodeGenStatus::Ok,
     )
 }
 

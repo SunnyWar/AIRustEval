@@ -6,7 +6,7 @@ pub fn name() -> (&'static str, NaiveDate, AICodeGenStatus) {
     (
         "gemini 2.0 Flash",
         NaiveDate::from_ymd_opt(2024, 1, 2).unwrap(),
-        AICodeGenStatus::Ok
+        AICodeGenStatus::Ok,
     )
 }
 

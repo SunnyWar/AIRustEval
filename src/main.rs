@@ -17,7 +17,7 @@ pub enum AICodeGenStatus {
     CompileError,
     SecondTryOk,
     SecondTryCompileError,
-    IncorrectResult
+    IncorrectResult,
 }
 
 impl fmt::Display for AICodeGenStatus {
@@ -32,7 +32,6 @@ impl fmt::Display for AICodeGenStatus {
         write!(f, "{}", s)
     }
 }
-
 
 #[inline(never)]
 pub fn time_function<F>(f: F, input1: &str, input2: &str) -> (usize, u128)
@@ -66,7 +65,12 @@ fn print_sorted_results(results: Vec<(&str, NaiveDate, AICodeGenStatus, usize, u
     for result in sorted_results {
         println!(
             "| {:<20} | {:<12} | {:<10} | {:<8} | {:<12} | {:<8} |",
-            result.0, result.1, format!("{}", result.2), result.3, result.4, result.5
+            result.0,
+            result.1,
+            format!("{}", result.2),
+            result.3,
+            result.4,
+            result.5
         );
     }
 }

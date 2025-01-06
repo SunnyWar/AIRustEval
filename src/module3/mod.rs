@@ -3,7 +3,11 @@ use chrono::NaiveDate;
 use crate::AICodeGenStatus;
 
 pub fn name() -> (&'static str, NaiveDate, AICodeGenStatus) {
-    ("syntha.ai", NaiveDate::from_ymd_opt(2024, 1, 2).unwrap(), AICodeGenStatus::Ok)
+    (
+        "syntha.ai",
+        NaiveDate::from_ymd_opt(2024, 1, 2).unwrap(),
+        AICodeGenStatus::Ok,
+    )
 }
 
 #[inline(never)]
