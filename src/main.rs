@@ -6,6 +6,7 @@ mod module2;
 mod module3;
 mod module4;
 mod module5;
+mod module6;
 
 use chrono::NaiveDate;
 use core::fmt;
@@ -52,7 +53,7 @@ fn print_sorted_results(results: Vec<(&str, NaiveDate, AICodeGenStatus, usize, u
     let mut sorted_results = results;
 
     // Sort results by time (descending)
-    sorted_results.sort_by(|a, b| b.3.cmp(&a.3));
+    sorted_results.sort_by(|a, b| b.4.cmp(&a.4));
 
     // Print header
     println!(
@@ -95,17 +96,24 @@ fn main() {
                         For who would bear the Whips and Scorns of time,";
 
     let baseline_result = time_function(baseline::levenshtein_distance, input1, input2);
-    let module1_result = time_function(module1::levenshtein_distance, input1, input2);
-    let module2_result = time_function(module2::levenshtein_distance, input1, input2);
-    let module3_result = time_function(module3::levenshtein_distance, input1, input2);
-    let module4_result = time_function(module4::levenshtein_distance, input1, input2);
-    let module5_result = time_function(module5::levenshtein_distance, input1, input2);
 
+    let module1_result = time_function(module1::levenshtein_distance, input1, input2);
     let module1_speedup = baseline_result.1 as f64 / module1_result.1 as f64;
+
+    let module2_result = time_function(module2::levenshtein_distance, input1, input2);
     let module2_speedup = baseline_result.1 as f64 / module2_result.1 as f64;
+
+    let module3_result = time_function(module3::levenshtein_distance, input1, input2);
     let module3_speedup = baseline_result.1 as f64 / module3_result.1 as f64;
+
+    let module4_result = time_function(module4::levenshtein_distance, input1, input2);
     let module4_speedup = baseline_result.1 as f64 / module4_result.1 as f64;
+
+    let module5_result = time_function(module5::levenshtein_distance, input1, input2);
     let module5_speedup = baseline_result.1 as f64 / module5_result.1 as f64;
+
+    let module6_result = time_function(module6::levenshtein_distance, input1, input2);
+    let module6_speedup = baseline_result.1 as f64 / module6_result.1 as f64;
 
     let results = vec![
         (
@@ -155,6 +163,14 @@ fn main() {
             module5_result.0,
             module5_result.1,
             format!("{:.2}x", module5_speedup),
+        ),
+        (
+            module6::name().0,
+            module6::name().1,
+            module6::name().2,
+            module6_result.0,
+            module6_result.1,
+            format!("{:.2}x", module6_speedup),
         ),
         // Add more modules here as needed
     ];
