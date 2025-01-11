@@ -170,7 +170,7 @@ fn main() {
             module6::name().2,
             module6_result.0,
             module6_result.1,
-            format!("{:.2}x", module6_speedup),
+            format!("{:.1}x", module6_speedup),
         ),
         // Add more modules here as needed
     ];
