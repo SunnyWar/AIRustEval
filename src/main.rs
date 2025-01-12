@@ -7,6 +7,7 @@ mod module_synthaai;
 mod module_gemini;
 mod module_claude;
 mod module_grok;
+mod module_watson;
 
 use chrono::NaiveDate;
 use core::fmt;
@@ -20,6 +21,7 @@ pub enum AICodeGenStatus {
     SecondTryOk,
     SecondTryCompileError,
     IncorrectResult,
+    AIRefusedToAnswer,
 }
 
 type FnAITest = fn(&str, &str) -> usize;
@@ -45,6 +47,7 @@ impl fmt::Display for AICodeGenStatus {
             AICodeGenStatus::SecondTryOk => "SecondTryOk",
             AICodeGenStatus::SecondTryCompileError => "SecondTryCompileError",
             AICodeGenStatus::IncorrectResult => "IncorrectResult",
+            AICodeGenStatus::AIRefusedToAnswer => "AIRefusedToAnswer"
         };
         write!(f, "{}", s)
     }
@@ -66,22 +69,35 @@ where
 }
 
 fn print_sorted_results(results: Vec<(String, NaiveDate, AICodeGenStatus, usize, u128, String)>) {
-    let mut sorted_results = results;
+    let mut zero_time_results = vec![];
+    let mut non_zero_time_results = vec![];
 
-    // Sort results by time (descending)
-    sorted_results.sort_by(|a, b| b.4.cmp(&a.4));
+    // Separate results with time 0 and non-zero time
+    for result in results {
+        if result.4 == 0 {
+            zero_time_results.push(result);
+        } else {
+            non_zero_time_results.push(result);
+        }
+    }
+
+    // Sort non-zero time results by time (descending)
+    non_zero_time_results.sort_by(|a, b| b.4.cmp(&a.4));
+
+    // Combine the lists, putting zero time results at the top
+    zero_time_results.extend(non_zero_time_results);
 
     // Print header
     println!(
-        "| {:<20} | {:<10} | {:<10} | {:<8} | {:<12} | {:<8} |",
+        "| {:<20} | {:<10} | {:<17} | {:<8} | {:<12} | {:<8} |",
         "Module", "Date", "Status", "Result", "Time (ns)", "Speedup"
     );
     println!("{:-<88}", "");
 
     // Print sorted results
-    for result in sorted_results {
+    for result in zero_time_results {
         println!(
-            "| {:<20} | {:<12} | {:<10} | {:<8} | {:<12} | {:<8} |",
+            "| {:<20} | {:<12} | {:<17} | {:<8} | {:<12} | {:<8} |",
             result.0,
             result.1,
             format!("{}", result.2),
@@ -138,6 +154,9 @@ fn main() {
     let mod_grok_result = time_function(mod_grok_info.functions[0], input1, input2);
     let mod_grok_speedup = baseline_result.1 as f64 / mod_grok_result.1 as f64;
 
+    let mod_watson_info = module_watson::get_candidates();
+    let mod_watson_result = time_function(mod_watson_info.functions[0], input1, input2);
+    let mod_watson_speedup = baseline_result.1 as f64 / mod_watson_result.1 as f64;
 
     let results = vec![
         (
@@ -195,6 +214,14 @@ fn main() {
             mod_grok_result.0,
             mod_grok_result.1,
             format!("{:.1}x", mod_grok_speedup),
+        ),
+        (
+            mod_watson_info.name,
+            mod_watson_info.dates[0],
+            mod_watson_info.status[0],
+            mod_watson_result.0,
+            mod_watson_result.1,
+            format!("{:.1}x", mod_watson_speedup),
         ),
         // Add more modules here as needed
     ];
