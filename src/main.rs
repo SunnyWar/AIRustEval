@@ -13,12 +13,28 @@ use core::fmt;
 use std::cell::UnsafeCell;
 use std::time::Instant;
 
+#[derive(Copy, Clone)]
 pub enum AICodeGenStatus {
     Ok,
     CompileError,
     SecondTryOk,
     SecondTryCompileError,
     IncorrectResult,
+}
+
+type FnAITest = fn(&str, &str) -> usize;
+
+pub struct CandidateInfo {
+    pub name: String,
+    pub dates: Vec<NaiveDate>,
+    pub status: Vec<AICodeGenStatus>,
+    pub functions: Vec<FnAITest>,
+}
+
+impl CandidateInfo {
+    pub fn new(name: String, dates: Vec<NaiveDate>, status: Vec<AICodeGenStatus>, functions: Vec<FnAITest>) -> Self {
+        CandidateInfo { name, dates, status, functions }
+    }
 }
 
 impl fmt::Display for AICodeGenStatus {
@@ -49,7 +65,7 @@ where
     (result, duration.as_nanos())
 }
 
-fn print_sorted_results(results: Vec<(&str, NaiveDate, AICodeGenStatus, usize, u128, String)>) {
+fn print_sorted_results(results: Vec<(String, NaiveDate, AICodeGenStatus, usize, u128, String)>) {
     let mut sorted_results = results;
 
     // Sort results by time (descending)
@@ -95,82 +111,90 @@ fn main() {
                         That makes Calamity of so long life:
                         For who would bear the Whips and Scorns of time,";
 
-    let baseline_result = time_function(baseline::levenshtein_distance, input1, input2);
+    let baseline_info = baseline::get_candidates();
+    let baseline_result = time_function(baseline_info.functions[0], input1, input2);
 
-    let module1_result = time_function(module_copilot::levenshtein_distance, input1, input2);
-    let module1_speedup = baseline_result.1 as f64 / module1_result.1 as f64;
+    let mod_copilot_info = module_copilot::get_candidates();
+    let mod_copilot_result = time_function(mod_copilot_info.functions[0], input1, input2);
+    let mod_copilot_speedup = baseline_result.1 as f64 / mod_copilot_result.1 as f64;
 
-    let module2_result = time_function(module_openai::levenshtein_distance, input1, input2);
-    let module2_speedup = baseline_result.1 as f64 / module2_result.1 as f64;
+    let mod_claude_info = module_claude::get_candidates();
+    let mod_claude_result = time_function(mod_claude_info.functions[0], input1, input2);
+    let mod_claude_speedup = baseline_result.1 as f64 / mod_claude_result.1 as f64;
 
-    let module3_result = time_function(module_synthaai::levenshtein_distance, input1, input2);
-    let module3_speedup = baseline_result.1 as f64 / module3_result.1 as f64;
+    let mod_gemini_info = module_gemini::get_candidates();
+    let mod_gemini_result = time_function(mod_gemini_info.functions[0], input1, input2);
+    let mod_gemini_speedup = baseline_result.1 as f64 / mod_gemini_result.1 as f64;
 
-    let module4_result = time_function(module_gemini::levenshtein_distance, input1, input2);
-    let module4_speedup = baseline_result.1 as f64 / module4_result.1 as f64;
+    let mod_openai_info = module_openai::get_candidates();
+    let mod_openai_result = time_function(mod_openai_info.functions[0], input1, input2);
+    let mod_openai_speedup = baseline_result.1 as f64 / mod_openai_result.1 as f64;
 
-    let module5_result = time_function(module_claude::levenshtein_distance, input1, input2);
-    let module5_speedup = baseline_result.1 as f64 / module5_result.1 as f64;
+    let mod_synthaai_info = module_synthaai::get_candidates();
+    let mod_synthaai_result = time_function(mod_synthaai_info.functions[0], input1, input2);
+    let mod_synthaai_speedup = baseline_result.1 as f64 / mod_synthaai_result.1 as f64;
 
-    let module6_result = time_function(module_grok::levenshtein_distance, input1, input2);
-    let module6_speedup = baseline_result.1 as f64 / module6_result.1 as f64;
+    let mod_grok_info = module_grok::get_candidates();
+    let mod_grok_result = time_function(mod_grok_info.functions[0], input1, input2);
+    let mod_grok_speedup = baseline_result.1 as f64 / mod_grok_result.1 as f64;
+
 
     let results = vec![
         (
-            baseline::name().0,
-            baseline::name().1,
-            baseline::name().2,
+            baseline_info.name,
+            baseline_info.dates[0],
+            baseline_info.status[0],
             baseline_result.0,
             baseline_result.1,
             "-----".to_string(),
         ),
         (
-            module_copilot::name().0,
-            module_copilot::name().1,
-            module_copilot::name().2,
-            module1_result.0,
-            module1_result.1,
-            format!("{:.1}x", module1_speedup),
+            mod_copilot_info.name,
+            mod_copilot_info.dates[0],
+            mod_copilot_info.status[0],
+            mod_copilot_result.0,
+            mod_copilot_result.1,
+            format!("{:.1}x", mod_copilot_speedup),
         ),
         (
-            module_openai::name().0,
-            module_openai::name().1,
-            module_openai::name().2,
-            module2_result.0,
-            module2_result.1,
-            format!("{:.1}x", module2_speedup),
+            mod_claude_info.name,
+            mod_claude_info.dates[0],
+            mod_claude_info.status[0],
+            mod_claude_result.0,
+            mod_claude_result.1,
+            format!("{:.1}x", mod_claude_speedup),
         ),
         (
-            module_synthaai::name().0,
-            module_synthaai::name().1,
-            module_synthaai::name().2,
-            module3_result.0,
-            module3_result.1,
-            format!("{:.1}x", module3_speedup),
+            mod_gemini_info.name,
+            mod_gemini_info.dates[0],
+            mod_gemini_info.status[0],
+            mod_gemini_result.0,
+            mod_gemini_result.1,
+            format!("{:.1}x", mod_gemini_speedup),
         ),
         (
-            module_gemini::name().0,
-            module_gemini::name().1,
-            module_gemini::name().2,
-            module4_result.0,
-            module4_result.1,
-            format!("{:.1}x", module4_speedup),
+            mod_openai_info.name,
+            mod_openai_info.dates[0],
+            mod_openai_info.status[0],
+            mod_openai_result.0,
+            mod_openai_result.1,
+            format!("{:.1}x", mod_openai_speedup),
         ),
         (
-            module_claude::name().0,
-            module_claude::name().1,
-            module_claude::name().2,
-            module5_result.0,
-            module5_result.1,
-            format!("{:.1}x", module5_speedup),
+            mod_synthaai_info.name,
+            mod_synthaai_info.dates[0],
+            mod_synthaai_info.status[0],
+            mod_synthaai_result.0,
+            mod_synthaai_result.1,
+            format!("{:.1}x", mod_synthaai_speedup),
         ),
         (
-            module_grok::name().0,
-            module_grok::name().1,
-            module_grok::name().2,
-            module6_result.0,
-            module6_result.1,
-            format!("{:.1}x", module6_speedup),
+            mod_grok_info.name,
+            mod_grok_info.dates[0],
+            mod_grok_info.status[0],
+            mod_grok_result.0,
+            mod_grok_result.1,
+            format!("{:.1}x", mod_grok_speedup),
         ),
         // Add more modules here as needed
     ];

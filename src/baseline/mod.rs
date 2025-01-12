@@ -1,12 +1,14 @@
+use std::vec;
 use chrono::NaiveDate;
-
 use crate::AICodeGenStatus;
+use crate::CandidateInfo;
 
-pub fn name() -> (&'static str, NaiveDate, AICodeGenStatus) {
-    (
-        "Baseline",
-        NaiveDate::from_ymd_opt(2025, 1, 2).unwrap(),
-        AICodeGenStatus::Ok,
+// add to the vectors as more attempts an this function are made by the AI
+pub fn get_candidates() -> CandidateInfo {
+    CandidateInfo::new( String::from("Baseline"),
+    vec![NaiveDate::from_ymd_opt(2025, 1, 2).unwrap()],
+    vec![AICodeGenStatus::Ok],
+    vec![levenshtein_distance],
     )
 }
 
