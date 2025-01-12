@@ -44,12 +44,13 @@ that AI's find difficul to optimize.
 
 ## Results to date:
 
-| Module             | Date       | Status | Result | Time (ns) | Speedup |
-|--------------------|------------|--------|--------|-----------|---------|
-| syntha.ai          | 2025-01-02 | Ok     | 305    | 36992600  | 0.98x   |
-| Baseline           | 2025-01-02 | Ok     | 305    | 36180300  | -----   |
-| GPT-4-turbo        | 2025-01-02 | Ok     | 305    | 906900    | 39.89x  |
-| gemini 2.0 Flash   | 2025-01-02 | Ok     | 305    | 847500    | 42.69x  |
-| Grok               | 2025-01-08 | Ok     | 305    | 841700    | 42.98x  |
-| Microsoft Copilot  | 2024-01-02 | Ok     | 305    | 501400    | 72.16x  |
-| claude             | 2025-01-02 | Ok     | 305    | 420500    | 86.04x  |
+| Module             | Date       | Status            | Result | Time (ns) | Speedup |
+|--------------------|------------|-------------------|--------|-----------|---------|
+| Watson             | 2025-01-10 | AIRefusedToAnswer | 0    | 0  | infx   |
+| syntha.ai          | 2025-01-02 | Ok                | 305    | 36992600  | 0.98x   |
+| Baseline           | 2025-01-02 | Ok                | 305    | 36180300  | -----   |
+| GPT-4-turbo        | 2025-01-02 | Ok                | 305    | 906900    | 39.89x  |
+| gemini 2.0 Flash   | 2025-01-02 | Ok                | 305    | 847500    | 42.69x  |
+| Grok               | 2025-01-08 | Ok                | 305    | 841700    | 42.98x  |
+| Microsoft Copilot  | 2024-01-02 | Ok                | 305    | 501400    | 72.16x  |
+| claude             | 2025-01-02 | Ok                | 305    | 420500    | 86.04x  |

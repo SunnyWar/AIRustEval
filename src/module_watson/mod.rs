@@ -13,6 +13,6 @@ pub fn get_candidates() -> CandidateInfo {
 }
 
 #[inline(never)]
-pub fn levenshtein_distance(s: &str, t: &str) -> usize {
+pub fn levenshtein_distance(_s: &str, _t: &str) -> usize {
     0
 }
