@@ -1,12 +1,12 @@
 #![recursion_limit = "256"]
 
 mod baseline;
-mod module1;
-mod module2;
-mod module3;
-mod module4;
-mod module5;
-mod module6;
+mod module_copilot;
+mod module_openai;
+mod module_synthaai;
+mod module_gemini;
+mod module_claude;
+mod module_grok;
 
 use chrono::NaiveDate;
 use core::fmt;
@@ -97,22 +97,22 @@ fn main() {
 
     let baseline_result = time_function(baseline::levenshtein_distance, input1, input2);
 
-    let module1_result = time_function(module1::levenshtein_distance, input1, input2);
+    let module1_result = time_function(module_copilot::levenshtein_distance, input1, input2);
     let module1_speedup = baseline_result.1 as f64 / module1_result.1 as f64;
 
-    let module2_result = time_function(module2::levenshtein_distance, input1, input2);
+    let module2_result = time_function(module_openai::levenshtein_distance, input1, input2);
     let module2_speedup = baseline_result.1 as f64 / module2_result.1 as f64;
 
-    let module3_result = time_function(module3::levenshtein_distance, input1, input2);
+    let module3_result = time_function(module_synthaai::levenshtein_distance, input1, input2);
     let module3_speedup = baseline_result.1 as f64 / module3_result.1 as f64;
 
-    let module4_result = time_function(module4::levenshtein_distance, input1, input2);
+    let module4_result = time_function(module_gemini::levenshtein_distance, input1, input2);
     let module4_speedup = baseline_result.1 as f64 / module4_result.1 as f64;
 
-    let module5_result = time_function(module5::levenshtein_distance, input1, input2);
+    let module5_result = time_function(module_claude::levenshtein_distance, input1, input2);
     let module5_speedup = baseline_result.1 as f64 / module5_result.1 as f64;
 
-    let module6_result = time_function(module6::levenshtein_distance, input1, input2);
+    let module6_result = time_function(module_grok::levenshtein_distance, input1, input2);
     let module6_speedup = baseline_result.1 as f64 / module6_result.1 as f64;
 
     let results = vec![
@@ -125,49 +125,49 @@ fn main() {
             "-----".to_string(),
         ),
         (
-            module1::name().0,
-            module1::name().1,
-            module1::name().2,
+            module_copilot::name().0,
+            module_copilot::name().1,
+            module_copilot::name().2,
             module1_result.0,
             module1_result.1,
             format!("{:.1}x", module1_speedup),
         ),
         (
-            module2::name().0,
-            module2::name().1,
-            module2::name().2,
+            module_openai::name().0,
+            module_openai::name().1,
+            module_openai::name().2,
             module2_result.0,
             module2_result.1,
             format!("{:.1}x", module2_speedup),
         ),
         (
-            module3::name().0,
-            module3::name().1,
-            module3::name().2,
+            module_synthaai::name().0,
+            module_synthaai::name().1,
+            module_synthaai::name().2,
             module3_result.0,
             module3_result.1,
             format!("{:.1}x", module3_speedup),
         ),
         (
-            module4::name().0,
-            module4::name().1,
-            module4::name().2,
+            module_gemini::name().0,
+            module_gemini::name().1,
+            module_gemini::name().2,
             module4_result.0,
             module4_result.1,
             format!("{:.1}x", module4_speedup),
         ),
         (
-            module5::name().0,
-            module5::name().1,
-            module5::name().2,
+            module_claude::name().0,
+            module_claude::name().1,
+            module_claude::name().2,
             module5_result.0,
             module5_result.1,
             format!("{:.1}x", module5_speedup),
         ),
         (
-            module6::name().0,
-            module6::name().1,
-            module6::name().2,
+            module_grok::name().0,
+            module_grok::name().1,
+            module_grok::name().2,
             module6_result.0,
             module6_result.1,
             format!("{:.1}x", module6_speedup),
