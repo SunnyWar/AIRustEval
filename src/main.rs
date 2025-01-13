@@ -127,104 +127,41 @@ fn main() {
                         That makes Calamity of so long life:
                         For who would bear the Whips and Scorns of time,";
 
-    let baseline_info = baseline::get_candidates();
-    let baseline_result = time_function(baseline_info.functions[0], input1, input2);
-
-    let mod_copilot_info = module_copilot::get_candidates();
-    let mod_copilot_result = time_function(mod_copilot_info.functions[0], input1, input2);
-    let mod_copilot_speedup = baseline_result.1 as f64 / mod_copilot_result.1 as f64;
-
-    let mod_claude_info = module_claude::get_candidates();
-    let mod_claude_result = time_function(mod_claude_info.functions[0], input1, input2);
-    let mod_claude_speedup = baseline_result.1 as f64 / mod_claude_result.1 as f64;
-
-    let mod_gemini_info = module_gemini::get_candidates();
-    let mod_gemini_result = time_function(mod_gemini_info.functions[0], input1, input2);
-    let mod_gemini_speedup = baseline_result.1 as f64 / mod_gemini_result.1 as f64;
-
-    let mod_openai_info = module_openai::get_candidates();
-    let mod_openai_result = time_function(mod_openai_info.functions[0], input1, input2);
-    let mod_openai_speedup = baseline_result.1 as f64 / mod_openai_result.1 as f64;
-
-    let mod_synthaai_info = module_synthaai::get_candidates();
-    let mod_synthaai_result = time_function(mod_synthaai_info.functions[0], input1, input2);
-    let mod_synthaai_speedup = baseline_result.1 as f64 / mod_synthaai_result.1 as f64;
-
-    let mod_grok_info = module_grok::get_candidates();
-    let mod_grok_result = time_function(mod_grok_info.functions[0], input1, input2);
-    let mod_grok_speedup = baseline_result.1 as f64 / mod_grok_result.1 as f64;
-
-    let mod_watson_info = module_watson::get_candidates();
-    let mod_watson_result = time_function(mod_watson_info.functions[0], input1, input2);
-    let mod_watson_speedup = baseline_result.1 as f64 / mod_watson_result.1 as f64;
-
-    let results = vec![
-        (
-            baseline_info.name,
-            baseline_info.dates[0],
-            baseline_info.status[0],
-            baseline_result.0,
-            baseline_result.1,
-            "-----".to_string(),
-        ),
-        (
-            mod_copilot_info.name,
-            mod_copilot_info.dates[0],
-            mod_copilot_info.status[0],
-            mod_copilot_result.0,
-            mod_copilot_result.1,
-            format!("{:.1}x", mod_copilot_speedup),
-        ),
-        (
-            mod_claude_info.name,
-            mod_claude_info.dates[0],
-            mod_claude_info.status[0],
-            mod_claude_result.0,
-            mod_claude_result.1,
-            format!("{:.1}x", mod_claude_speedup),
-        ),
-        (
-            mod_gemini_info.name,
-            mod_gemini_info.dates[0],
-            mod_gemini_info.status[0],
-            mod_gemini_result.0,
-            mod_gemini_result.1,
-            format!("{:.1}x", mod_gemini_speedup),
-        ),
-        (
-            mod_openai_info.name,
-            mod_openai_info.dates[0],
-            mod_openai_info.status[0],
-            mod_openai_result.0,
-            mod_openai_result.1,
-            format!("{:.1}x", mod_openai_speedup),
-        ),
-        (
-            mod_synthaai_info.name,
-            mod_synthaai_info.dates[0],
-            mod_synthaai_info.status[0],
-            mod_synthaai_result.0,
-            mod_synthaai_result.1,
-            format!("{:.1}x", mod_synthaai_speedup),
-        ),
-        (
-            mod_grok_info.name,
-            mod_grok_info.dates[0],
-            mod_grok_info.status[0],
-            mod_grok_result.0,
-            mod_grok_result.1,
-            format!("{:.1}x", mod_grok_speedup),
-        ),
-        (
-            mod_watson_info.name,
-            mod_watson_info.dates[0],
-            mod_watson_info.status[0],
-            mod_watson_result.0,
-            mod_watson_result.1,
-            format!("{:.1}x", mod_watson_speedup),
-        ),
-        // Add more modules here as needed
+    let modules = vec![
+        (baseline::get_candidates()),
+        (module_copilot::get_candidates()),
+        (module_claude::get_candidates()),
+        (module_gemini::get_candidates()),
+        (module_openai::get_candidates()),
+        (module_synthaai::get_candidates()),
+        (module_grok::get_candidates()),
+        (module_watson::get_candidates()),
     ];
+
+    let mut results = Vec::new();
+
+    let baseline_result = time_function(modules[0].functions[0], input1, input2);
+    results.push((
+        modules[0].name.to_string(),
+        modules[0].dates[0],
+        modules[0].status[0],
+        baseline_result.0,
+        baseline_result.1,
+        "-----".to_string(),
+    ));
+
+    (1..modules.len()).for_each(|i| {
+        let mod_result = time_function(modules[i].functions[0], input1, input2);
+        let speedup = baseline_result.1 as f64 / mod_result.1 as f64;
+        results.push((
+            modules[i].name.to_string(),
+            modules[i].dates[0],
+            modules[i].status[0],
+            mod_result.0,
+            mod_result.1,
+            format!("{:.1}x", speedup),
+        ));
+    });
 
     print_sorted_results(results);
 }
