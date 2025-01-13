@@ -3,6 +3,9 @@ use chrono::NaiveDate;
 use crate::AICodeGenStatus;
 use crate::CandidateInfo;
 
+// found here: https://www.ibm.com/watsonx
+// requires an account and doesn't work very well so will likely not try it again.
+
 // add to the vectors as more attempts an this function are made by the AI
 pub fn get_candidates() -> CandidateInfo {
     CandidateInfo::new(

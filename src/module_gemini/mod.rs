@@ -3,6 +3,9 @@ use chrono::NaiveDate;
 use crate::AICodeGenStatus;
 use crate::CandidateInfo;
 
+// found here: https://gemini.google.com/
+// version is listed on page and can the selected
+
 // add to the vectors as more attempts an this function are made by the AI
 pub fn get_candidates() -> CandidateInfo {
     CandidateInfo::new(

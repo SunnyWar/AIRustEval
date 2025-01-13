@@ -3,6 +3,7 @@ use chrono::NaiveDate;
 use crate::AICodeGenStatus;
 use crate::CandidateInfo;
 
+// found here: https://copilot.microsoft.com/
 // Microsoft Copilot does not show version number. The only way to know
 // that it's been updated is by looking at the release notes here:
 // https://learn.microsoft.com/en-us/copilot/microsoft-365/release-notes?tabs=all

@@ -3,6 +3,9 @@ use crate::CandidateInfo;
 use chrono::NaiveDate;
 use std::vec;
 
+// Note: this functions was hand-crafted and cannot change.
+// They represent the baseline that each AI has to improve upon.
+
 // add to the vectors as more attempts an this function are made by the AI
 pub fn get_candidates() -> CandidateInfo {
     CandidateInfo::new(

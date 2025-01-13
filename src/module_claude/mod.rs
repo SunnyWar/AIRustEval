@@ -3,10 +3,13 @@ use chrono::NaiveDate;
 use crate::AICodeGenStatus;
 use crate::CandidateInfo;
 
+// found here: https://claude.ai/
+// version can be found by asking claude "what version are you?"
+
 // add to the vectors as more attempts an this function are made by the AI
 pub fn get_candidates() -> CandidateInfo {
     CandidateInfo::new(
-        String::from("claude"),
+        String::from("claude 3.5 Sonnet"),
         vec![NaiveDate::from_ymd_opt(2025, 1, 2).unwrap()],
         vec![AICodeGenStatus::Ok],
         vec![levenshtein_distance],

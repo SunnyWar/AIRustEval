@@ -3,6 +3,9 @@ use chrono::NaiveDate;
 use crate::AICodeGenStatus;
 use crate::CandidateInfo;
 
+// found here: https://syntha.ai/optimizers/rust
+// I couldn't find a way to get the name or version of the AI engine used
+
 // add to the vectors as more attempts an this function are made by the AI
 pub fn get_candidates() -> CandidateInfo {
     CandidateInfo::new(
