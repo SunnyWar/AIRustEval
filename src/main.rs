@@ -14,7 +14,7 @@ use core::fmt;
 use std::cell::UnsafeCell;
 use std::time::Instant;
 
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, PartialEq)]
 pub enum AICodeGenStatus {
     Ok,
     CompileError,
@@ -74,10 +74,10 @@ fn print_sorted_results(results: Vec<(String, NaiveDate, AICodeGenStatus, usize,
 
     // Separate results with time 0 and non-zero time
     for result in results {
-        if result.4 == 0 {
-            zero_time_results.push(result);
-        } else {
+        if result.2 == AICodeGenStatus::Ok {
             non_zero_time_results.push(result);
+        } else {
+            zero_time_results.push(result);
         }
     }
 
