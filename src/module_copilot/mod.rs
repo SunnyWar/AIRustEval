@@ -15,6 +15,10 @@ pub fn get_candidates() -> CandidateInfo {
     CandidateInfo::new(
         String::from("Microsoft Copilot"),
         vec![
+            "levenshstein distance".to_string(),
+            "levenshstein distance".to_string(),
+        ],
+        vec![
             NaiveDate::from_ymd_opt(2025, 1, 2).unwrap(),
             NaiveDate::from_ymd_opt(2025, 1, 13).unwrap(),
         ],
@@ -94,4 +98,22 @@ pub fn levenshtein_distance2(s: &str, t: &str) -> usize {
 
     // The last element of the matrix is the Levenshtein distance
     matrix[m][n]
+}
+
+#[inline(never)]
+pub fn sum_of_divisors(n: u64) -> u64 {
+    let mut sum = 0;
+    let mut i = 1;
+
+    while i * i <= n {
+        if n % i == 0 {
+            sum += i;
+            if i != n / i {
+                sum += n / i;
+            }
+        }
+        i += 1;
+    }
+
+    sum
 }

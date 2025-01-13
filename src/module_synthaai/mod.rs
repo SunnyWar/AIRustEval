@@ -10,6 +10,7 @@ use crate::CandidateInfo;
 pub fn get_candidates() -> CandidateInfo {
     CandidateInfo::new(
         String::from("syntha.ai"),
+        vec!["levenshstein distance".to_string()],
         vec![NaiveDate::from_ymd_opt(2025, 1, 2).unwrap()],
         vec![AICodeGenStatus::Ok],
         vec![levenshtein_distance],

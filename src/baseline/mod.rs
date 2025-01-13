@@ -10,6 +10,7 @@ use std::vec;
 pub fn get_candidates() -> CandidateInfo {
     CandidateInfo::new(
         String::from("Baseline"),
+        vec!["levenshstein distance".to_string()],
         vec![NaiveDate::from_ymd_opt(2025, 1, 2).unwrap()],
         vec![AICodeGenStatus::Ok],
         vec![levenshtein_distance],
@@ -54,4 +55,68 @@ pub fn levenshtein_distance(s: &str, t: &str) -> usize {
 
     // The last element of the matrix is the Levenshtein distance
     matrix[m][n]
+}
+
+/// Returns the sum of all divisors of the given number `n`.
+/// Naive implementation iterates up to `n`.
+#[inline(never)]
+pub fn sum_of_divisors(n: u64) -> u64 {
+    (1..=n).filter(|&i| n % i == 0).sum()
+}
+
+/// Counts the number of prime numbers less than `n`.
+/// Naive implementation checks every number for primality.
+#[inline(never)]
+pub fn count_primes(n: u64) -> u64 {
+    (2..n).filter(|&x| is_prime(x)).count() as u64
+}
+
+/// Helper function to check if a number is prime.
+fn is_prime(num: u64) -> bool {
+    if num < 2 {
+        return false;
+    }
+    for i in 2..=((num as f64).sqrt() as u64) {
+        if num % i == 0 {
+            return false;
+        }
+    }
+    true
+}
+
+/// Computes the nth Fibonacci number.
+/// Naive implementation uses recursion.
+#[inline(never)]
+pub fn fibonacci(n: u64) -> u64 {
+    match n {
+        0 => 0,
+        1 => 1,
+        _ => fibonacci(n - 1) + fibonacci(n - 2),
+    }
+}
+
+/// Finds the first highly composite number greater than `n`.
+/// A naive implementation checks every number up to n, counting divisors for each.
+#[inline(never)]
+pub fn highly_composite(n: u64) -> u64 {
+    (n + 1..)
+        .find(|&x| count_divisors(x) > count_divisors(n))
+        .unwrap()
+}
+
+/// Helper function to count the number of divisors.
+fn count_divisors(n: u64) -> u64 {
+    (1..=n).filter(|&i| n % i == 0).count() as u64
+}
+
+/// Finds the smallest perfect number greater than `n`.
+/// The naive approach iterates through all numbers up to n, calculating the sum of divisors for each.
+#[inline(never)]
+pub fn perfect_number(n: u64) -> u64 {
+    (n + 1..).find(|&x| sum_of_proper_divisors(x) == x).unwrap()
+}
+
+/// Helper function to calculate the sum of proper divisors.
+pub fn sum_of_proper_divisors(n: u64) -> u64 {
+    (1..n).filter(|&i| n % i == 0).sum()
 }

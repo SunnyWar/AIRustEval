@@ -11,6 +11,7 @@ mod module_watson;
 
 use chrono::NaiveDate;
 use core::fmt;
+use prettytable::{Cell, Row, Table, format};
 use std::cell::UnsafeCell;
 use std::time::Instant;
 
@@ -28,7 +29,8 @@ type FnAITest = fn(&str, &str) -> usize;
 
 #[derive(Debug)]
 pub struct CandidateInfo {
-    pub name: String,
+    pub engine_name: String,
+    pub function_names: Vec<String>,
     pub dates: Vec<NaiveDate>,
     pub status: Vec<AICodeGenStatus>,
     pub functions: Vec<FnAITest>,
@@ -36,13 +38,15 @@ pub struct CandidateInfo {
 
 impl CandidateInfo {
     pub fn new(
-        name: String,
+        engine_name: String,
+        function_names: Vec<String>,
         dates: Vec<NaiveDate>,
         status: Vec<AICodeGenStatus>,
         functions: Vec<FnAITest>,
     ) -> Self {
         CandidateInfo {
-            name,
+            engine_name,
+            function_names,
             dates,
             status,
             functions,
@@ -79,49 +83,67 @@ where
     (result, duration.as_nanos())
 }
 
-fn print_sorted_results(results: Vec<(String, NaiveDate, AICodeGenStatus, usize, u128, String)>) {
+fn print_sorted_results(
+    results: Vec<(
+        String,
+        String,
+        NaiveDate,
+        AICodeGenStatus,
+        usize,
+        u128,
+        String,
+    )>,
+) {
     let mut zero_time_results = vec![];
     let mut non_zero_time_results = vec![];
 
     // Separate results with time 0 and non-zero time
     for result in results {
-        if result.2 == AICodeGenStatus::Ok {
+        if result.3 == AICodeGenStatus::Ok {
             non_zero_time_results.push(result);
         } else {
             zero_time_results.push(result);
         }
     }
 
-    // Sort non-zero time results by time (descending)
-    non_zero_time_results.sort_by(|a, b| b.4.cmp(&a.4));
+    // Sort non-zero time results by time (ascending)
+    non_zero_time_results.sort_by(|a, b| b.5.cmp(&a.5));
 
     // Combine the lists, putting zero time results at the top
     zero_time_results.extend(non_zero_time_results);
 
-    // Print header
-    println!(
-        "| {:<20} | {:<10} | {:<17} | {:<8} | {:<12} | {:<8} |",
-        "Module", "Date", "Status", "Result", "Time (ns)", "Speedup"
-    );
+    // Create a table
+    let mut table = Table::new();
 
-    // Print the separator line with the exact column widths
-    println!(
-        "|{:-<22}|{:-<12}|{:-<19}|{:-<10}|{:-<14}|{:-<10}|",
-        "", "", "", "", "", ""
-    );
+    // Set the table format
+    table.set_format(*format::consts::FORMAT_NO_LINESEP_WITH_TITLE);
 
-    // Print sorted results
+    // Add a header row
+    table.set_titles(Row::new(vec![
+        Cell::new("AI Engine"),
+        Cell::new("Function Name"),
+        Cell::new("Date"),
+        Cell::new("Status"),
+        Cell::new("Result"),
+        Cell::new("Time (ns)"),
+        Cell::new("Speedup"),
+    ]));
+
+    // Add rows to the table
     for result in zero_time_results {
-        println!(
-            "| {:<20} | {:<10} | {:<17} | {:<8} | {:<12} | {:<8} |",
-            result.0,
-            result.1,
-            format!("{}", result.2),
-            result.3,
-            result.4,
-            result.5
-        );
+        table.add_row(Row::new(vec![
+            Cell::new(&result.0),
+            Cell::new(&result.1),
+            Cell::new(&format!("{}", result.2)),
+            Cell::new(&format!("{:?}", result.3)),
+            Cell::new(&result.4.to_string()),
+            Cell::new(&result.5.to_string()),
+            Cell::new(&result.6),
+        ]));
     }
+
+    // Print the table
+    table.printstd();
 }
 
 fn main() {
@@ -158,7 +180,8 @@ fn main() {
 
     let baseline_result = time_function(modules[0].functions[0], input1, input2);
     results.push((
-        modules[0].name.to_string(),
+        modules[0].engine_name.to_string(),
+        modules[0].function_names[0].to_string(),
         modules[0].dates[0],
         modules[0].status[0],
         baseline_result.0,
@@ -171,7 +194,8 @@ fn main() {
             let mod_result = time_function(*function, input1, input2);
             let speedup = baseline_result.1 as f64 / mod_result.1 as f64;
             results.push((
-                module.name.to_string(),
+                module.engine_name.to_string(),
+                module.function_names[j].to_string(),
                 module.dates[j],
                 module.status[j],
                 mod_result.0,

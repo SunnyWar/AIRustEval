@@ -10,6 +10,7 @@ use crate::CandidateInfo;
 pub fn get_candidates() -> CandidateInfo {
     CandidateInfo::new(
         String::from("ChatGPT, version 2"),
+        vec!["levenshstein distance".to_string()],
         vec![NaiveDate::from_ymd_opt(2025, 1, 2).unwrap()],
         vec![AICodeGenStatus::Ok],
         vec![levenshtein_distance],
@@ -58,4 +59,21 @@ pub fn levenshtein_distance(s: &str, t: &str) -> usize {
     }
 
     prev_row[n]
+}
+
+#[inline(never)]
+pub fn sum_of_divisors(n: u64) -> u64 {
+    let mut sum = 0;
+    let sqrt_n = (n as f64).sqrt() as u64;
+
+    for i in 1..=sqrt_n {
+        if n % i == 0 {
+            sum += i; // Add the divisor
+            if i != n / i {
+                sum += n / i; // Add the complementary divisor
+            }
+        }
+    }
+
+    sum
 }
