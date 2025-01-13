@@ -3,12 +3,22 @@ use chrono::NaiveDate;
 use crate::AICodeGenStatus;
 use crate::CandidateInfo;
 
+// Microsoft Copilot does not show version number. The only way to know
+// that it's been updated is by looking at the release notes here:
+// https://learn.microsoft.com/en-us/copilot/microsoft-365/release-notes?tabs=all
+// I'll assume, without any other information, that any time there are
+// new release notes, that the AI has been updated.
+
 // add to the vectors as more attempts an this function are made by the AI
 pub fn get_candidates() -> CandidateInfo {
-    CandidateInfo::new( String::from("Microsoft Copilot"),
-    vec![NaiveDate::from_ymd_opt(2025, 1, 2).unwrap()],
-    vec![AICodeGenStatus::Ok],
-    vec![levenshtein_distance],
+    CandidateInfo::new(
+        String::from("Microsoft Copilot"),
+        vec![
+            NaiveDate::from_ymd_opt(2025, 1, 2).unwrap(),
+            NaiveDate::from_ymd_opt(2025, 1, 13).unwrap(),
+        ],
+        vec![AICodeGenStatus::Ok, AICodeGenStatus::Ok],
+        vec![levenshtein_distance, levenshtein_distance2],
     )
 }
 
@@ -47,4 +57,40 @@ pub fn levenshtein_distance(s: &str, t: &str) -> usize {
     }
 
     prev_row[n]
+}
+
+#[inline(never)]
+pub fn levenshtein_distance2(s: &str, t: &str) -> usize {
+    let m = s.len();
+    let n = t.len();
+
+    // Create a 2D matrix to store the distances
+    let mut matrix = vec![vec![0; n + 1]; m + 1];
+
+    // Initialize the first row and column of the matrix
+    for i in 0..=m {
+        matrix[i][0] = i;
+    }
+    for j in 0..=n {
+        matrix[0][j] = j;
+    }
+
+    // Compute the Levenshtein distance
+    for (i, sc) in s.chars().enumerate().take(m) {
+        for (j, tc) in t.chars().enumerate().take(n) {
+            let cost = if sc == tc { 0 } else { 1 };
+
+            matrix[i + 1][j + 1] = *[
+                matrix[i][j + 1] + 1, // Deletion
+                matrix[i + 1][j] + 1, // Insertion
+                matrix[i][j] + cost,  // Substitution
+            ]
+            .iter()
+            .min()
+            .unwrap();
+        }
+    }
+
+    // The last element of the matrix is the Levenshtein distance
+    matrix[m][n]
 }

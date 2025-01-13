@@ -1,12 +1,12 @@
 #![recursion_limit = "256"]
 
 mod baseline;
+mod module_claude;
 mod module_copilot;
+mod module_gemini;
+mod module_grok;
 mod module_openai;
 mod module_synthaai;
-mod module_gemini;
-mod module_claude;
-mod module_grok;
 mod module_watson;
 
 use chrono::NaiveDate;
@@ -14,7 +14,7 @@ use core::fmt;
 use std::cell::UnsafeCell;
 use std::time::Instant;
 
-#[derive(Copy, Clone, PartialEq)]
+#[derive(Copy, Clone, PartialEq, Debug)]
 pub enum AICodeGenStatus {
     Ok,
     CompileError,
@@ -26,6 +26,7 @@ pub enum AICodeGenStatus {
 
 type FnAITest = fn(&str, &str) -> usize;
 
+#[derive(Debug)]
 pub struct CandidateInfo {
     pub name: String,
     pub dates: Vec<NaiveDate>,
@@ -34,8 +35,18 @@ pub struct CandidateInfo {
 }
 
 impl CandidateInfo {
-    pub fn new(name: String, dates: Vec<NaiveDate>, status: Vec<AICodeGenStatus>, functions: Vec<FnAITest>) -> Self {
-        CandidateInfo { name, dates, status, functions }
+    pub fn new(
+        name: String,
+        dates: Vec<NaiveDate>,
+        status: Vec<AICodeGenStatus>,
+        functions: Vec<FnAITest>,
+    ) -> Self {
+        CandidateInfo {
+            name,
+            dates,
+            status,
+            functions,
+        }
     }
 }
 
@@ -47,7 +58,7 @@ impl fmt::Display for AICodeGenStatus {
             AICodeGenStatus::SecondTryOk => "SecondTryOk",
             AICodeGenStatus::SecondTryCompileError => "SecondTryCompileError",
             AICodeGenStatus::IncorrectResult => "IncorrectResult",
-            AICodeGenStatus::AIRefusedToAnswer => "AIRefusedToAnswer"
+            AICodeGenStatus::AIRefusedToAnswer => "AIRefusedToAnswer",
         };
         write!(f, "{}", s)
     }
@@ -92,12 +103,17 @@ fn print_sorted_results(results: Vec<(String, NaiveDate, AICodeGenStatus, usize,
         "| {:<20} | {:<10} | {:<17} | {:<8} | {:<12} | {:<8} |",
         "Module", "Date", "Status", "Result", "Time (ns)", "Speedup"
     );
-    println!("{:-<88}", "");
+
+    // Print the separator line with the exact column widths
+    println!(
+        "|{:-<22}|{:-<12}|{:-<19}|{:-<10}|{:-<14}|{:-<10}|",
+        "", "", "", "", "", ""
+    );
 
     // Print sorted results
     for result in zero_time_results {
         println!(
-            "| {:<20} | {:<12} | {:<17} | {:<8} | {:<12} | {:<8} |",
+            "| {:<20} | {:<10} | {:<17} | {:<8} | {:<12} | {:<8} |",
             result.0,
             result.1,
             format!("{}", result.2),
@@ -150,17 +166,19 @@ fn main() {
         "-----".to_string(),
     ));
 
-    (1..modules.len()).for_each(|i| {
-        let mod_result = time_function(modules[i].functions[0], input1, input2);
-        let speedup = baseline_result.1 as f64 / mod_result.1 as f64;
-        results.push((
-            modules[i].name.to_string(),
-            modules[i].dates[0],
-            modules[i].status[0],
-            mod_result.0,
-            mod_result.1,
-            format!("{:.1}x", speedup),
-        ));
+    modules.iter().enumerate().skip(1).for_each(|(_i, module)| {
+        for (j, function) in module.functions.iter().enumerate() {
+            let mod_result = time_function(*function, input1, input2);
+            let speedup = baseline_result.1 as f64 / mod_result.1 as f64;
+            results.push((
+                module.name.to_string(),
+                module.dates[j],
+                module.status[j],
+                mod_result.0,
+                mod_result.1,
+                format!("{:.1}x", speedup),
+            ));
+        }
     });
 
     print_sorted_results(results);
