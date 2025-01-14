@@ -1,7 +1,7 @@
 use chrono::NaiveDate;
 
-use crate::AICodeGenStatus;
-use crate::CandidateInfo;
+use crate::common::AICodeGenStatus;
+use crate::common::CandidateInfo;
 
 // found here: https://copilot.microsoft.com/
 // Microsoft Copilot does not show version number. The only way to know

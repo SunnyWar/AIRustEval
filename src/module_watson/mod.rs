@@ -1,7 +1,7 @@
 use chrono::NaiveDate;
 
-use crate::AICodeGenStatus;
-use crate::CandidateInfo;
+use crate::common::AICodeGenStatus;
+use crate::common::CandidateInfo;
 
 // found here: https://www.ibm.com/watsonx
 // requires an account and doesn't work very well so will likely not try it again.

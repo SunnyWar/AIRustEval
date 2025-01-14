@@ -1,7 +1,7 @@
 use chrono::NaiveDate;
 
-use crate::AICodeGenStatus;
-use crate::CandidateInfo;
+use crate::common::AICodeGenStatus;
+use crate::common::CandidateInfo;
 
 // found here: https://gemini.google.com/
 // version is listed on page and can the selected
