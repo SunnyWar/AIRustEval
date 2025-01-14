@@ -57,15 +57,29 @@ fn main() {
         for (j, function) in module.functions.iter().enumerate() {
             let mod_result = common::time_function(*function, input1, input2);
             let speedup = baseline_result.1 as f64 / mod_result.1 as f64;
-            results.push((
-                module.engine_name.to_string(),
-                module.function_names[j].to_string(),
-                module.dates[j],
-                module.status[j],
-                mod_result.0,
-                mod_result.1,
-                format!("{:.1}x", speedup),
-            ));
+
+            if mod_result.0 == 0 {
+                results.push((
+                    module.engine_name.to_string(),
+                    module.function_names[j].to_string(),
+                    module.dates[j],
+                    module.status[j],
+                    mod_result.0,
+                    0,
+                    "none".to_string(),
+                ));    
+            }
+            else {
+                results.push((
+                    module.engine_name.to_string(),
+                    module.function_names[j].to_string(),
+                    module.dates[j],
+                    module.status[j],
+                    mod_result.0,
+                    mod_result.1,
+                    format!("{:.1}x", speedup),
+                ));                    
+            }
         }
     });
 
