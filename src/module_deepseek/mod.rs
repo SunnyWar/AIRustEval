@@ -1,7 +1,8 @@
-use crate::AICodeGenStatus;
-use crate::CandidateInfo;
 use chrono::NaiveDate;
-use std::vec;
+
+use crate::common::AICodeGenStatus;
+use crate::common::CandidateInfo;
+
 
 // Note: this functions was hand-crafted and cannot change.
 // They represent the baseline that each AI has to improve upon.

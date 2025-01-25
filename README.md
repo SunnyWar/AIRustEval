@@ -45,17 +45,17 @@ that AI's find difficul to optimize.
 
 ## Results to date:
 
-| AI Engine          | Function Name         | Date       | Status            | Result | Time (ns) | Speedup   |
-|--------------------|-----------------------|------------|-------------------|--------|-----------|-----------|
-| watson             | levenshstein distance | 2025-01-10 | AIRefusedToAnswer | 0      | 100       | 208051.0x |
-| Baseline           | levenshstein distance | 2025-01-02 | Ok                | 305    | 20805100  | -----     |
-| syntha.ai          | levenshstein distance | 2025-01-02 | Ok                | 305    | 20666100  | 1.0x      |
-| deepseek V3        | levenshstein distance | 2025-01-25 | Ok                | 305    | 1001900   | 20.8x     |
-| Microsoft Copilot  | levenshstein distance | 2025-01-13 | Ok                | 305    | 949000    | 21.9x     |
-| Microsoft Copilot  | levenshstein distance | 2025-01-25 | Ok                | 305    | 326700    | 63.7x     |
-| ChatGPT, version 2 | levenshstein distance | 2025-01-02 | Ok                | 305    | 324800    | 64.1x     |
-| Microsoft Copilot  | levenshstein distance | 2025-01-02 | Ok                | 305    | 291500    | 71.4x     |
-| ChatGPT, version 2 | levenshstein distance | 2025-01-25 | Ok                | 305    | 285700    | 72.8x     |
-| claude 3.5 Sonnet  | levenshstein distance | 2025-01-02 | Ok                | 305    | 278500    | 74.7x     |
-| Grock 2            | levenshstein distance | 2025-01-08 | Ok                | 305    | 270300    | 77.0x     |
-| gemini 2.0 Flash   | levenshstein distance | 2025-01-02 | Ok                | 305    | 270200    | 77.0x     |
+| AI Engine          | Function Name         | Date       | Status            | Result | Time (ns) | Speedup |
+|--------------------|-----------------------|------------|-------------------|--------|-----------|---------|
+| watson             | levenshstein distance | 2025-01-10 | AIRefusedToAnswer | 0      | 0         | none    |
+| Baseline           | levenshstein distance | 2025-01-02 | Ok                | 305    | 20405700  | -----   |
+| syntha.ai          | levenshstein distance | 2025-01-02 | Ok                | 305    | 20164500  | 1.0x    |
+| Microsoft Copilot  | levenshstein distance | 2025-01-13 | Ok                | 305    | 931300    | 21.9x   |
+| deepseek V3        | levenshstein distance | 2025-01-25 | Ok                | 305    | 912800    | 22.4x   |
+| Microsoft Copilot  | levenshstein distance | 2025-01-25 | Ok                | 305    | 334000    | 61.1x   |
+| ChatGPT, version 2 | levenshstein distance | 2025-01-02 | Ok                | 305    | 328800    | 62.1x   |
+| Microsoft Copilot  | levenshstein distance | 2025-01-02 | Ok                | 305    | 287700    | 70.9x   |
+| ChatGPT, version 2 | levenshstein distance | 2025-01-25 | Ok                | 305    | 281300    | 72.5x   |
+| Grock 2            | levenshstein distance | 2025-01-08 | Ok                | 305    | 268700    | 75.9x   |
+| gemini 2.0 Flash   | levenshstein distance | 2025-01-02 | Ok                | 305    | 267300    | 76.3x   |
+| claude 3.5 Sonnet  | levenshstein distance | 2025-01-02 | Ok                | 305    | 265300    | 76.9x   |
