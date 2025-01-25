@@ -1,7 +1,7 @@
 use chrono::NaiveDate;
 
-use crate::AICodeGenStatus;
-use crate::CandidateInfo;
+use crate::common::AICodeGenStatus;
+use crate::common::CandidateInfo;
 
 // found here: https://claude.ai/
 // version can be found by asking claude "what version are you?"

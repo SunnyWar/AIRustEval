@@ -1,5 +1,5 @@
-use crate::AICodeGenStatus;
-use crate::CandidateInfo;
+use crate::common::AICodeGenStatus;
+use crate::common::CandidateInfo;
 use chrono::NaiveDate;
 use std::vec;
 

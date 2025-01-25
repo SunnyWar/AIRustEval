@@ -1,7 +1,7 @@
 use chrono::NaiveDate;
 
-use crate::AICodeGenStatus;
-use crate::CandidateInfo;
+use crate::common::AICodeGenStatus;
+use crate::common::CandidateInfo;
 
 // found here: https://syntha.ai/optimizers/rust
 // I couldn't find a way to get the name or version of the AI engine used
