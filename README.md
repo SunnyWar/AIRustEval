@@ -14,8 +14,9 @@ Many AI's will generate code with errors. Given the oppurtunity to fix the error
 will often generate correct code on the second try. For this reason, the follow heuristic
 is being followed.
 
-1. Prompt AI with the following: "Make this code run faster". Then, within the same prompt,
-paste the 'baseline' function into the AI prompt block. The 'baseline' function can be found 
+PROMPT USED: "You are a highly skilled Rust developer. Your task is to optimize the following Rust function for maximum speed and efficiency. The code will run on a x86-x64 system with an AMD Ryzen 7 processor. Readability of the code is not important. Please provide the optimized code. Here is the function that needs optimization:"
+
+1. Prompt AI with that pasted the 'baseline' function into the AI prompt block. The 'baseline' function can be found 
 at src\baseline\mod.rs
 2. Take the generated code and see if it compiles and runs. Be sure to run as --release.
 3. There are three possible states: 
@@ -44,14 +45,17 @@ that AI's find difficul to optimize.
 
 ## Results to date:
 
-| Module               | Date       | Status            | Result   | Time (ns)    | Speedup  |
-|----------------------|------------|-------------------|----------|--------------|----------|
-| watson               | 2025-01-10 | AIRefusedToAnswer | 0        | 0            | infx     |
-| Baseline             | 2025-01-02 | Ok                | 305      | 20705100     | -----    |
-| syntha.ai            | 2025-01-02 | Ok                | 305      | 20256500     | 1.0x     |
-| Microsoft Copilot    | 2025-01-13 | Ok                | 305      | 993600       | 20.8x    |
-| ChatGPT, version 2   | 2025-01-02 | Ok                | 305      | 322700       | 64.2x    |
-| Microsoft Copilot    | 2025-01-02 | Ok                | 305      | 292500       | 70.8x    |
-| claude 3.5 Sonnet    | 2025-01-02 | Ok                | 305      | 280100       | 73.9x    |
-| Grock 2              | 2025-01-08 | Ok                | 305      | 271700       | 76.2x    |
-| gemini 2.0 Flash     | 2025-01-02 | Ok                | 305      | 271300       | 76.3x    |
+| AI Engine          | Function Name         | Date       | Status            | Result | Time (ns) | Speedup   |
+|--------------------|-----------------------|------------|-------------------|--------|-----------|-----------|
+| watson             | levenshstein distance | 2025-01-10 | AIRefusedToAnswer | 0      | 100       | 208051.0x |
+| Baseline           | levenshstein distance | 2025-01-02 | Ok                | 305    | 20805100  | -----     |
+| syntha.ai          | levenshstein distance | 2025-01-02 | Ok                | 305    | 20666100  | 1.0x      |
+| deepseek V3        | levenshstein distance | 2025-01-25 | Ok                | 305    | 1001900   | 20.8x     |
+| Microsoft Copilot  | levenshstein distance | 2025-01-13 | Ok                | 305    | 949000    | 21.9x     |
+| Microsoft Copilot  | levenshstein distance | 2025-01-25 | Ok                | 305    | 326700    | 63.7x     |
+| ChatGPT, version 2 | levenshstein distance | 2025-01-02 | Ok                | 305    | 324800    | 64.1x     |
+| Microsoft Copilot  | levenshstein distance | 2025-01-02 | Ok                | 305    | 291500    | 71.4x     |
+| ChatGPT, version 2 | levenshstein distance | 2025-01-25 | Ok                | 305    | 285700    | 72.8x     |
+| claude 3.5 Sonnet  | levenshstein distance | 2025-01-02 | Ok                | 305    | 278500    | 74.7x     |
+| Grock 2            | levenshstein distance | 2025-01-08 | Ok                | 305    | 270300    | 77.0x     |
+| gemini 2.0 Flash   | levenshstein distance | 2025-01-02 | Ok                | 305    | 270200    | 77.0x     |

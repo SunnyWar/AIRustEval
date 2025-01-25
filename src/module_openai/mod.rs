@@ -10,10 +10,16 @@ use crate::CandidateInfo;
 pub fn get_candidates() -> CandidateInfo {
     CandidateInfo::new(
         String::from("ChatGPT, version 2"),
-        vec!["levenshstein distance".to_string()],
-        vec![NaiveDate::from_ymd_opt(2025, 1, 2).unwrap()],
-        vec![AICodeGenStatus::Ok],
-        vec![levenshtein_distance],
+        vec![
+            "levenshstein distance".to_string(),
+            "levenshstein distance".to_string(),
+        ],
+        vec![
+            NaiveDate::from_ymd_opt(2025, 1, 2).unwrap(),
+            NaiveDate::from_ymd_opt(2025, 1, 25).unwrap(),
+        ],
+        vec![AICodeGenStatus::Ok, AICodeGenStatus::Ok],
+        vec![levenshtein_distance, levenshtein_distance2],
     )
 }
 
@@ -59,6 +65,41 @@ pub fn levenshtein_distance(s: &str, t: &str) -> usize {
     }
 
     prev_row[n]
+}
+
+#[inline(never)]
+pub fn levenshtein_distance2(s: &str, t: &str) -> usize {
+    let s_bytes = s.as_bytes();
+    let t_bytes = t.as_bytes();
+    let m = s.len();
+    let n = t.len();
+
+    // Use two rows to minimize memory usage
+    let mut prev_row = vec![0; n + 1];
+    let mut curr_row = vec![0; n + 1];
+
+    // Initialize the first row
+    for j in 0..=n {
+        prev_row[j] = j;
+    }
+
+    // Fill the matrix row by row
+    for i in 1..=m {
+        curr_row[0] = i;
+        for j in 1..=n {
+            let cost = if s_bytes[i - 1] == t_bytes[j - 1] {
+                0
+            } else {
+                1
+            };
+            curr_row[j] = (prev_row[j] + 1) // Deletion
+                .min(curr_row[j - 1] + 1) // Insertion
+                .min(prev_row[j - 1] + cost); // Substitution
+        }
+        prev_row.copy_from_slice(&curr_row);
+    }
+
+    curr_row[n]
 }
 
 #[inline(never)]

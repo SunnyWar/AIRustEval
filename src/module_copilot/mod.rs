@@ -17,13 +17,23 @@ pub fn get_candidates() -> CandidateInfo {
         vec![
             "levenshstein distance".to_string(),
             "levenshstein distance".to_string(),
+            "levenshstein distance".to_string(),
         ],
         vec![
             NaiveDate::from_ymd_opt(2025, 1, 2).unwrap(),
             NaiveDate::from_ymd_opt(2025, 1, 13).unwrap(),
+            NaiveDate::from_ymd_opt(2025, 1, 25).unwrap(),
         ],
-        vec![AICodeGenStatus::Ok, AICodeGenStatus::Ok],
-        vec![levenshtein_distance, levenshtein_distance2],
+        vec![
+            AICodeGenStatus::Ok,
+            AICodeGenStatus::Ok,
+            AICodeGenStatus::Ok,
+        ],
+        vec![
+            levenshtein_distance,
+            levenshtein_distance2,
+            levenshtein_distance3,
+        ],
     )
 }
 
@@ -98,6 +108,25 @@ pub fn levenshtein_distance2(s: &str, t: &str) -> usize {
 
     // The last element of the matrix is the Levenshtein distance
     matrix[m][n]
+}
+
+#[inline(never)]
+pub fn levenshtein_distance3(s: &str, t: &str) -> usize {
+    let m = s.len();
+    let n = t.len();
+    let mut prev_row: Vec<usize> = (0..=n).collect();
+    let mut curr_row = vec![0; n + 1];
+    for (i, sc) in s.chars().enumerate() {
+        curr_row[0] = i + 1;
+        for (j, tc) in t.chars().enumerate() {
+            let cost = if sc == tc { 0 } else { 1 };
+            curr_row[j + 1] = (prev_row[j + 1] + 1)
+                .min(curr_row[j] + 1)
+                .min(prev_row[j] + cost);
+        }
+        std::mem::swap(&mut prev_row, &mut curr_row);
+    }
+    prev_row[n]
 }
 
 #[inline(never)]

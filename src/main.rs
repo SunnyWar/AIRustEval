@@ -3,6 +3,7 @@
 mod baseline;
 mod module_claude;
 mod module_copilot;
+mod module_deepseek;
 mod module_gemini;
 mod module_grok;
 mod module_openai;
@@ -174,6 +175,7 @@ fn main() {
         (module_synthaai::get_candidates()),
         (module_grok::get_candidates()),
         (module_watson::get_candidates()),
+        (module_deepseek::get_candidates()),
     ];
 
     let mut results = Vec::new();
