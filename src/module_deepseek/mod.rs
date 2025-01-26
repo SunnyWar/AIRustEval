@@ -3,6 +3,9 @@ use chrono::NaiveDate;
 use crate::common::AICodeGenStatus;
 use crate::common::CandidateInfo;
 
+// found here: https://chat.deepseek.com/
+// choose the "R1" version
+
 // Note: this functions was hand-crafted and cannot change.
 // They represent the baseline that each AI has to improve upon.
 
