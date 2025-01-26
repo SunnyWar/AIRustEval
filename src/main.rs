@@ -85,4 +85,67 @@ fn main() {
     });
 
     common::print_sorted_results(results);
+
+    println!("---for testing---");
+
+    println!("sum_of_divisors");
+    let n = 10000;
+    for i in 1..=n {
+        let x = module_baseline::sum_of_divisors(n);
+        let y = module_copilot::sum_of_divisors(n);
+        let z = module_deepseek::sum_of_divisors(n);
+
+        if x != y || z != x {
+            println!("sum_of_divisors Error: x = {}, y = {}, z = {}", x, y, z);
+            break;
+        }
+    }
+
+    println!("count_primes");
+    let n = 1000;
+    for i in 1..=n {
+        let x = module_baseline::count_primes(n);
+        let z = module_deepseek::count_primes(n);
+
+        if z != x {
+            println!("count_primes Error: x = {}, z = {}", x, z);
+            break;
+        }
+    }
+
+    println!("finonacci");
+    let n = 30;
+    for i in 1..=n {
+        let x = module_baseline::fibonacci(n);
+        let z = module_deepseek::fibonacci(n);
+
+        if z != x {
+            println!("fibonacci Error: x = {}, z = {}", x, z);
+            break;
+        }
+    }
+
+    println!("highly_composite");
+    let n = 30;
+    for i in 1..=n {
+        let x = module_baseline::highly_composite(n);
+        let z = module_deepseek::highly_composite(n);
+
+        if z != x {
+            println!("highly_composite Error: x = {}, z = {}", x, z);
+            break;
+        }
+    }
+
+    println!("sum_of_proper_divisors");
+    let n = 10000;
+    for i in 1..=n {
+        let x = module_baseline::sum_of_proper_divisors(n);
+        let z = module_deepseek::sum_of_proper_divisors(n);
+
+        if z != x {
+            println!("sum_of_proper_divisors Error: x = {}, z = {}", x, z);
+            break;
+        }
+    }
 }

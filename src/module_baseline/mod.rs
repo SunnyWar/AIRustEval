@@ -109,14 +109,8 @@ fn count_divisors(n: u64) -> u64 {
     (1..=n).filter(|&i| n % i == 0).count() as u64
 }
 
-/// Finds the smallest perfect number greater than `n`.
-/// The naive approach iterates through all numbers up to n, calculating the sum of divisors for each.
-#[inline(never)]
-pub fn perfect_number(n: u64) -> u64 {
-    (n + 1..).find(|&x| sum_of_proper_divisors(x) == x).unwrap()
-}
-
 /// Helper function to calculate the sum of proper divisors.
+#[inline(never)]
 pub fn sum_of_proper_divisors(n: u64) -> u64 {
     (1..n).filter(|&i| n % i == 0).sum()
 }
