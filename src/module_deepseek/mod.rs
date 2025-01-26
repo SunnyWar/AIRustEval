@@ -3,14 +3,13 @@ use chrono::NaiveDate;
 use crate::common::AICodeGenStatus;
 use crate::common::CandidateInfo;
 
-
 // Note: this functions was hand-crafted and cannot change.
 // They represent the baseline that each AI has to improve upon.
 
 // add to the vectors as more attempts an this function are made by the AI
 pub fn get_candidates() -> CandidateInfo {
     CandidateInfo::new(
-        String::from("deepseek V3"),
+        String::from("deepseek R1"),
         vec!["levenshstein distance".to_string()],
         vec![NaiveDate::from_ymd_opt(2025, 1, 25).unwrap()],
         vec![AICodeGenStatus::Ok],
@@ -20,39 +19,48 @@ pub fn get_candidates() -> CandidateInfo {
 
 #[inline(never)]
 pub fn levenshtein_distance(s: &str, t: &str) -> usize {
+    if s == t {
+        return 0;
+    }
+
     let s_chars: Vec<char> = s.chars().collect();
     let t_chars: Vec<char> = t.chars().collect();
     let m = s_chars.len();
     let n = t_chars.len();
 
-    // Use a 1D vector to store the distances
-    let mut matrix = vec![0; (m + 1) * (n + 1)];
-
-    // Initialize the first row and column of the matrix
-    for i in 0..=m {
-        matrix[i * (n + 1)] = i;
+    if m == 0 {
+        return n;
     }
-    for j in 0..=n {
-        matrix[j] = j;
+    if n == 0 {
+        return m;
     }
 
-    // Compute the Levenshtein distance
+    let mut row: Vec<usize> = (0..=n).collect();
+
     for i in 1..=m {
+        let s_char = unsafe { *s_chars.get_unchecked(i - 1) };
+        let mut diagonal = row[0];
+        unsafe {
+            *row.get_unchecked_mut(0) = i;
+        }
+
         for j in 1..=n {
-            let cost = if s_chars[i - 1] == t_chars[j - 1] {
-                0
-            } else {
-                1
-            };
+            let t_char = unsafe { *t_chars.get_unchecked(j - 1) };
+            let cost = (s_char != t_char) as usize;
 
-            let deletion = matrix[(i - 1) * (n + 1) + j] + 1;
-            let insertion = matrix[i * (n + 1) + (j - 1)] + 1;
-            let substitution = matrix[(i - 1) * (n + 1) + (j - 1)] + cost;
+            let old_diagonal = diagonal;
+            diagonal = unsafe { *row.get_unchecked(j) };
 
-            matrix[i * (n + 1) + j] = deletion.min(insertion).min(substitution);
+            let deletion = diagonal + 1;
+            let insertion = unsafe { *row.get_unchecked(j - 1) } + 1;
+            let substitution = old_diagonal + cost;
+
+            let min_val = deletion.min(insertion).min(substitution);
+            unsafe {
+                *row.get_unchecked_mut(j) = min_val;
+            }
         }
     }
 
-    // The last element of the matrix is the Levenshtein distance
-    matrix[m * (n + 1) + n]
+    unsafe { *row.get_unchecked(n) }
 }

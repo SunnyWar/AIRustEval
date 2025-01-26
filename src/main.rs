@@ -69,9 +69,8 @@ fn main() {
                     mod_result.0,
                     0,
                     "none".to_string(),
-                ));    
-            }
-            else {
+                ));
+            } else {
                 results.push((
                     module.engine_name.to_string(),
                     module.function_names[j].to_string(),
@@ -80,7 +79,7 @@ fn main() {
                     mod_result.0,
                     mod_result.1,
                     format!("{:.1}x", speedup),
-                ));                    
+                ));
             }
         }
     });
