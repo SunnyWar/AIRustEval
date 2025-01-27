@@ -12,6 +12,7 @@ mod module_synthaai;
 mod module_watson;
 
 fn main() {
+    let fun_duration = 2;
     let input1 = "To be, or not to be, that is the question:
                         Whether 'tis nobler in the mind to suffer
                         The slings and arrows of outrageous fortune,
@@ -44,7 +45,8 @@ fn main() {
 
     let mut results = Vec::new();
 
-    let baseline_result = common::time_function(modules[0].functions[0], input1, input2);
+    let baseline_result =
+        common::run_for_duration(modules[0].functions[0], input1, input2, fun_duration);
     results.push((
         modules[0].engine_name.to_string(),
         modules[0].function_names[0].to_string(),
@@ -57,8 +59,8 @@ fn main() {
 
     modules.iter().enumerate().skip(1).for_each(|(_i, module)| {
         for (j, function) in module.functions.iter().enumerate() {
-            let mod_result = common::time_function(*function, input1, input2);
-            let speedup = baseline_result.1 as f64 / mod_result.1 as f64;
+            let mod_result = common::run_for_duration(*function, input1, input2, fun_duration);
+            let speedup = mod_result.1 / baseline_result.1;
 
             if mod_result.0 == 0 {
                 results.push((
@@ -67,7 +69,7 @@ fn main() {
                     module.dates[j],
                     module.status[j],
                     mod_result.0,
-                    0,
+                    0.0,
                     "none".to_string(),
                 ));
             } else {

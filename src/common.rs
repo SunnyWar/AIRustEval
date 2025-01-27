@@ -2,7 +2,8 @@ use chrono::NaiveDate;
 use core::fmt;
 use prettytable::{Cell, Row, Table, format};
 use std::cell::UnsafeCell;
-use std::time::Instant;
+use std::cmp::Ordering;
+use std::time::{Duration, Instant};
 
 type FnAITest = fn(&str, &str) -> usize;
 
@@ -57,19 +58,28 @@ impl CandidateInfo {
     }
 }
 
-#[inline(never)]
-pub fn time_function<F>(f: F, input1: &str, input2: &str) -> (usize, u128)
+pub fn run_for_duration<F>(f: F, input1: &str, input2: &str, duration_sec: u64) -> (usize, f64)
 where
     F: Fn(&str, &str) -> usize,
 {
-    let start = Instant::now();
-    let result = f(input1, input2);
-    let duration = start.elapsed();
-    let result_cell = UnsafeCell::new(result);
-    unsafe {
-        std::ptr::write_volatile(result_cell.get(), result);
+    let duration = Duration::new(duration_sec, 0);
+    let start_time = Instant::now();
+    let mut run_count = 0;
+    let mut total_result = 0;
+    let mut result = 0;
+
+    while Instant::now().duration_since(start_time) < duration {
+        result = f(input1, input2);
+        total_result += result;
+        run_count += 1;
+        let result_cell = UnsafeCell::new(result);
+        unsafe {
+            std::ptr::write_volatile(result_cell.get(), result);
+        }
     }
-    (result, duration.as_nanos())
+
+    let total_runtime = Instant::now().duration_since(start_time).as_secs_f64();
+    (result, run_count as f64 / total_runtime)
 }
 
 pub fn print_sorted_results(
@@ -79,7 +89,7 @@ pub fn print_sorted_results(
         NaiveDate,
         AICodeGenStatus,
         usize,
-        u128,
+        f64,
         String,
     )>,
 ) {
@@ -96,7 +106,7 @@ pub fn print_sorted_results(
     }
 
     // Sort non-zero time results by time (ascending)
-    non_zero_time_results.sort_by(|a, b| b.5.cmp(&a.5));
+    non_zero_time_results.sort_by(|a, b| a.5.partial_cmp(&b.5).unwrap_or(Ordering::Equal));
 
     // Combine the lists, putting zero time results at the top
     zero_time_results.extend(non_zero_time_results);
@@ -114,7 +124,7 @@ pub fn print_sorted_results(
         Cell::new("Date"),
         Cell::new("Status"),
         Cell::new("Result"),
-        Cell::new("Time (ns)"),
+        Cell::new("Iter/Time"),
         Cell::new("Speedup"),
     ]));
 
@@ -126,7 +136,7 @@ pub fn print_sorted_results(
             Cell::new(&format!("{}", result.2)),
             Cell::new(&format!("{:?}", result.3)),
             Cell::new(&result.4.to_string()),
-            Cell::new(&result.5.to_string()),
+            Cell::new(&format!("{:.2}", result.5)),
             Cell::new(&result.6),
         ]));
     }
