@@ -32,15 +32,15 @@ fn main() {
                         For who would bear the Whips and Scorns of time,";
 
     let modules = vec![
-        (module_baseline::get_candidates()),
-        (module_copilot::get_candidates()),
-        (module_claude::get_candidates()),
-        (module_gemini::get_candidates()),
-        (module_openai::get_candidates()),
-        (module_synthaai::get_candidates()),
-        (module_grok::get_candidates()),
-        (module_watson::get_candidates()),
-        (module_deepseek::get_candidates()),
+        module_baseline::get_candidates(),
+        module_copilot::get_candidates(),
+        module_claude::get_candidates(),
+        module_gemini::get_candidates(),
+        module_openai::get_candidates(),
+        module_synthaai::get_candidates(),
+        module_grok::get_candidates(),
+        module_watson::get_candidates(),
+        module_deepseek::get_candidates(),
     ];
 
     let mut results = Vec::new();
@@ -93,9 +93,9 @@ fn main() {
     println!("sum_of_divisors");
     let n = 10000;
     for i in 1..=n {
-        let x = module_baseline::sum_of_divisors(n);
-        let y = module_copilot::sum_of_divisors(n);
-        let z = module_deepseek::sum_of_divisors(n);
+        let x = module_baseline::sum_of_divisors(i);
+        let y = module_copilot::sum_of_divisors(i);
+        let z = module_deepseek::sum_of_divisors(i);
 
         if x != y || z != x {
             println!("sum_of_divisors Error: x = {}, y = {}, z = {}", x, y, z);
@@ -106,8 +106,8 @@ fn main() {
     println!("count_primes");
     let n = 1000;
     for i in 1..=n {
-        let x = module_baseline::count_primes(n);
-        let z = module_deepseek::count_primes(n);
+        let x = module_baseline::count_primes(i);
+        let z = module_deepseek::count_primes(i);
 
         if z != x {
             println!("count_primes Error: x = {}, z = {}", x, z);
@@ -118,8 +118,8 @@ fn main() {
     println!("finonacci");
     let n = 30;
     for i in 1..=n {
-        let x = module_baseline::fibonacci(n);
-        let z = module_deepseek::fibonacci(n);
+        let x = module_baseline::fibonacci(i);
+        let z = module_deepseek::fibonacci(i);
 
         if z != x {
             println!("fibonacci Error: x = {}, z = {}", x, z);
@@ -130,8 +130,8 @@ fn main() {
     println!("highly_composite");
     let n = 30;
     for i in 1..=n {
-        let x = module_baseline::highly_composite(n);
-        let z = module_deepseek::highly_composite(n);
+        let x = module_baseline::highly_composite(i);
+        let z = module_deepseek::highly_composite(i);
 
         if z != x {
             println!("highly_composite Error: x = {}, z = {}", x, z);
@@ -142,8 +142,8 @@ fn main() {
     println!("sum_of_proper_divisors");
     let n = 10000;
     for i in 1..=n {
-        let x = module_baseline::sum_of_proper_divisors(n);
-        let z = module_deepseek::sum_of_proper_divisors(n);
+        let x = module_baseline::sum_of_proper_divisors(i);
+        let z = module_deepseek::sum_of_proper_divisors(i);
 
         if z != x {
             println!("sum_of_proper_divisors Error: x = {}, z = {}", x, z);
