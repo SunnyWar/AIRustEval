@@ -124,7 +124,7 @@ pub fn print_sorted_results(
         Cell::new("Date"),
         Cell::new("Status"),
         Cell::new("Result"),
-        Cell::new("Iter/Time"),
+        Cell::new("Iter/Sec"),
         Cell::new("Speedup"),
     ]));
 
