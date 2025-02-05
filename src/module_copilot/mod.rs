@@ -2,6 +2,7 @@ use chrono::NaiveDate;
 
 use crate::common::AICodeGenStatus;
 use crate::common::CandidateInfo;
+use crate::common::CandidateInfo2;
 
 // found here: https://copilot.microsoft.com/
 // Microsoft Copilot does not show version number. The only way to know
@@ -34,6 +35,16 @@ pub fn get_candidates() -> CandidateInfo {
             levenshtein_distance2,
             levenshtein_distance3,
         ],
+    )
+}
+
+pub fn get_candidates2() -> CandidateInfo2 {
+    CandidateInfo2::new(
+        String::from("Microsoft Copilot"),
+        vec!["sum of divisors".to_string()],
+        vec![NaiveDate::from_ymd_opt(2025, 2, 3).unwrap()],
+        vec![AICodeGenStatus::Ok],
+        vec![sum_of_divisors],
     )
 }
 

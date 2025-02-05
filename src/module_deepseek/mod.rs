@@ -2,6 +2,7 @@ use chrono::NaiveDate;
 
 use crate::common::AICodeGenStatus;
 use crate::common::CandidateInfo;
+use crate::common::CandidateInfo2;
 
 // found here: https://chat.deepseek.com/
 // choose the "R1" version
@@ -17,6 +18,40 @@ pub fn get_candidates() -> CandidateInfo {
         vec![NaiveDate::from_ymd_opt(2025, 1, 25).unwrap()],
         vec![AICodeGenStatus::Ok],
         vec![levenshtein_distance],
+    )
+}
+
+pub fn get_candidates2() -> CandidateInfo2 {
+    CandidateInfo2::new(
+        String::from("Baseline"),
+        vec![
+            "sum of divisors".to_string(),
+            "count of primes".to_string(),
+            "fibonacci".to_string(),
+            "highly composite".to_string(),
+            "sum of proper divisors".to_string(),
+        ],
+        vec![
+            NaiveDate::from_ymd_opt(2025, 2, 3).unwrap(),
+            NaiveDate::from_ymd_opt(2025, 2, 3).unwrap(),
+            NaiveDate::from_ymd_opt(2025, 2, 3).unwrap(),
+            NaiveDate::from_ymd_opt(2025, 2, 3).unwrap(),
+            NaiveDate::from_ymd_opt(2025, 2, 3).unwrap(),
+        ],
+        vec![
+            AICodeGenStatus::Ok,
+            AICodeGenStatus::Ok,
+            AICodeGenStatus::Ok,
+            AICodeGenStatus::Ok,
+            AICodeGenStatus::Ok,
+        ],
+        vec![
+            sum_of_divisors,
+            count_primes,
+            fibonacci,
+            highly_composite,
+            sum_of_proper_divisors,
+        ],
     )
 }
 

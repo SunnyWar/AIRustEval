@@ -57,36 +57,49 @@ fn main() {
         "-----".to_string(),
     ));
 
-    modules.iter().enumerate().skip(1).for_each(|(_i, module)| {
-        for (j, function) in module.functions.iter().enumerate() {
-            let mod_result = common::run_for_duration(*function, input1, input2, fun_duration);
-            let speedup = mod_result.1 / baseline_result.1;
-
-            if mod_result.0 == 0 {
-                results.push((
-                    module.engine_name.to_string(),
-                    module.function_names[j].to_string(),
-                    module.dates[j],
-                    module.status[j],
-                    mod_result.0,
-                    0.0,
-                    "none".to_string(),
-                ));
-            } else {
-                results.push((
-                    module.engine_name.to_string(),
-                    module.function_names[j].to_string(),
-                    module.dates[j],
-                    module.status[j],
-                    mod_result.0,
-                    mod_result.1,
-                    format!("{:.1}x", speedup),
-                ));
-            }
-        }
-    });
+    get_fun_results(
+        fun_duration,
+        input1,
+        input2,
+        modules,
+        &mut results,
+        baseline_result,
+    );
 
     common::print_sorted_results(results);
+
+    // ---------------------------------------------------------------------------
+    //                type 2 functions
+    // ---------------------------------------------------------------------------
+
+    let modules2 = vec![
+        module_baseline::get_candidates2(),
+        module_copilot::get_candidates2(),
+        module_deepseek::get_candidates2(),
+    ];
+
+    let mut results2 = Vec::new();
+
+    let baseline_result2 = common::run_for_duration2(modules2[0].functions[0], 1000, fun_duration);
+    results2.push((
+        modules2[0].engine_name.to_string(),
+        modules2[0].function_names[0].to_string(),
+        modules2[0].dates[0],
+        modules2[0].status[0],
+        baseline_result2.0,
+        baseline_result2.1,
+        "-----".to_string(),
+    ));
+
+    get_fun_results2(
+        fun_duration,
+        1000,
+        modules2,
+        &mut results2,
+        baseline_result2,
+    );
+
+    common::print_sorted_results2(results2);
 
     println!("---for testing---");
 
@@ -150,4 +163,95 @@ fn main() {
             break;
         }
     }
+}
+
+fn get_fun_results(
+    fun_duration: u64,
+    input1: &str,
+    input2: &str,
+    modules: Vec<common::CandidateInfo>,
+    results: &mut Vec<(
+        String,
+        String,
+        chrono::NaiveDate,
+        common::AICodeGenStatus,
+        usize,
+        f64,
+        String,
+    )>,
+    baseline_result: (usize, f64),
+) {
+    modules.iter().enumerate().skip(1).for_each(|(_i, module)| {
+        for (j, function) in module.functions.iter().enumerate() {
+            let mod_result = common::run_for_duration(*function, input1, input2, fun_duration);
+            let speedup = mod_result.1 / baseline_result.1;
+
+            if mod_result.0 == 0 {
+                results.push((
+                    module.engine_name.to_string(),
+                    module.function_names[j].to_string(),
+                    module.dates[j],
+                    module.status[j],
+                    mod_result.0,
+                    0.0,
+                    "none".to_string(),
+                ));
+            } else {
+                results.push((
+                    module.engine_name.to_string(),
+                    module.function_names[j].to_string(),
+                    module.dates[j],
+                    module.status[j],
+                    mod_result.0,
+                    mod_result.1,
+                    format!("{:.1}x", speedup),
+                ));
+            }
+        }
+    });
+}
+
+fn get_fun_results2(
+    fun_duration: u64,
+    input: u64,
+    modules: Vec<common::CandidateInfo2>,
+    results: &mut Vec<(
+        String,
+        String,
+        chrono::NaiveDate,
+        common::AICodeGenStatus,
+        u64,
+        f64,
+        String,
+    )>,
+    baseline_result: (u64, f64),
+) {
+    modules.iter().enumerate().skip(1).for_each(|(_i, module)| {
+        for (j, function) in module.functions.iter().enumerate() {
+            let mod_result = common::run_for_duration2(*function, input, fun_duration);
+            let speedup = mod_result.1 / baseline_result.1;
+
+            if mod_result.0 == 0 {
+                results.push((
+                    module.engine_name.to_string(),
+                    module.function_names[j].to_string(),
+                    module.dates[j],
+                    module.status[j],
+                    mod_result.0,
+                    0.0,
+                    "none".to_string(),
+                ));
+            } else {
+                results.push((
+                    module.engine_name.to_string(),
+                    module.function_names[j].to_string(),
+                    module.dates[j],
+                    module.status[j],
+                    mod_result.0,
+                    mod_result.1,
+                    format!("{:.1}x", speedup),
+                ));
+            }
+        }
+    });
 }
