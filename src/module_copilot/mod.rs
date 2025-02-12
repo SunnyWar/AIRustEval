@@ -41,10 +41,10 @@ pub fn get_candidates() -> CandidateInfo {
 pub fn get_candidates2() -> CandidateInfo2 {
     CandidateInfo2::new(
         String::from("Microsoft Copilot"),
-        vec!["sum of divisors".to_string()],
-        vec![NaiveDate::from_ymd_opt(2025, 2, 3).unwrap()],
-        vec![AICodeGenStatus::Ok],
-        vec![sum_of_divisors],
+        vec!["sum of divisors".to_string(), "highly_composite".to_string()],
+        vec![NaiveDate::from_ymd_opt(2025, 2, 3).unwrap(),NaiveDate::from_ymd_opt(2025, 2, 4).unwrap()],
+        vec![AICodeGenStatus::Ok,AICodeGenStatus::Ok],
+        vec![sum_of_divisors, highly_composite],
     )
 }
 
@@ -157,3 +157,44 @@ pub fn sum_of_divisors(n: u64) -> u64 {
 
     sum
 }
+
+#[inline(never)]
+pub fn highly_composite(n: u64) -> u64 {
+    let n_divisors = count_divisors(n);
+
+    let mut x = n + 1;
+    loop {
+        let x_divisors = count_divisors(x);
+        if x_divisors > n_divisors {
+            return x;
+        }
+        x += 1;
+    }
+}
+
+#[inline(always)]
+fn count_divisors(n: u64) -> u64 {
+    let mut num = n;
+    let mut count = 1;
+    let mut p = 2;
+
+    while p * p <= num {
+        let mut exponent = 0;
+        while num % p == 0 {
+            num /= p;
+            exponent += 1;
+        }
+        if exponent > 0 {
+            count *= exponent + 1;
+        }
+        p += if p == 2 { 1 } else { 2 }; // Check 2 and then skip even numbers
+    }
+
+    if num > 1 {
+        count *= 2;
+    }
+
+    count
+}
+
+
