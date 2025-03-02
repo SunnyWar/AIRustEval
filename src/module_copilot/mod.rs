@@ -41,9 +41,15 @@ pub fn get_candidates() -> CandidateInfo {
 pub fn get_candidates2() -> CandidateInfo2 {
     CandidateInfo2::new(
         String::from("Microsoft Copilot"),
-        vec!["sum of divisors".to_string(), "highly_composite".to_string()],
-        vec![NaiveDate::from_ymd_opt(2025, 2, 3).unwrap(),NaiveDate::from_ymd_opt(2025, 2, 4).unwrap()],
-        vec![AICodeGenStatus::Ok,AICodeGenStatus::Ok],
+        vec![
+            "sum of divisors".to_string(),
+            "highly_composite".to_string(),
+        ],
+        vec![
+            NaiveDate::from_ymd_opt(2025, 2, 3).unwrap(),
+            NaiveDate::from_ymd_opt(2025, 2, 4).unwrap(),
+        ],
+        vec![AICodeGenStatus::Ok, AICodeGenStatus::Ok],
         vec![sum_of_divisors, highly_composite],
     )
 }
@@ -196,5 +202,3 @@ fn count_divisors(n: u64) -> u64 {
 
     count
 }
-
-

@@ -3,8 +3,8 @@ use core::fmt;
 use prettytable::{Cell, Row, Table, format};
 use std::cell::UnsafeCell;
 use std::cmp::Ordering;
-use std::time::{Duration, Instant};
 use std::collections::HashMap;
+use std::time::{Duration, Instant};
 
 type FnAITest = fn(&str, &str) -> usize;
 type FnAITest2 = fn(u64) -> u64;
@@ -151,7 +151,10 @@ pub fn print_sorted_results(
     // Group results by function name
     for result in results {
         let function_name = result.1.clone();
-        grouped_results.entry(function_name).or_insert_with(Vec::new).push(result);
+        grouped_results
+            .entry(function_name)
+            .or_insert_with(Vec::new)
+            .push(result);
     }
 
     for (function_name, mut function_results) in grouped_results {
@@ -209,22 +212,17 @@ pub fn print_sorted_results(
 }
 
 pub fn print_sorted_results2(
-    results: Vec<(
-        String,
-        String,
-        NaiveDate,
-        AICodeGenStatus,
-        u64,
-        f64,
-        String,
-    )>,
+    results: Vec<(String, String, NaiveDate, AICodeGenStatus, u64, f64, String)>,
 ) {
     let mut grouped_results: HashMap<String, Vec<_>> = HashMap::new();
 
     // Group results by function name
     for result in results {
         let function_name = result.1.clone();
-        grouped_results.entry(function_name).or_insert_with(Vec::new).push(result);
+        grouped_results
+            .entry(function_name)
+            .or_insert_with(Vec::new)
+            .push(result);
     }
 
     for (function_name, mut function_results) in grouped_results {

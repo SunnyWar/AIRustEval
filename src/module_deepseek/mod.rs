@@ -1,8 +1,7 @@
-use chrono::NaiveDate;
-
 use crate::common::AICodeGenStatus;
 use crate::common::CandidateInfo;
 use crate::common::CandidateInfo2;
+use chrono::NaiveDate;
 
 // found here: https://chat.deepseek.com/
 // choose the "R1" version
@@ -23,7 +22,7 @@ pub fn get_candidates() -> CandidateInfo {
 
 pub fn get_candidates2() -> CandidateInfo2 {
     CandidateInfo2::new(
-        String::from("Baseline"),
+        String::from("deepseek R1"),
         vec![
             "sum of divisors".to_string(),
             "count of primes".to_string(),
@@ -39,7 +38,7 @@ pub fn get_candidates2() -> CandidateInfo2 {
             NaiveDate::from_ymd_opt(2025, 2, 3).unwrap(),
         ],
         vec![
-            AICodeGenStatus::Ok,
+            AICodeGenStatus::SecondTryOk,
             AICodeGenStatus::Ok,
             AICodeGenStatus::Ok,
             AICodeGenStatus::Ok,
