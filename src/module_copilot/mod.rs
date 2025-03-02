@@ -43,7 +43,7 @@ pub fn get_candidates2() -> CandidateInfo2 {
         String::from("Microsoft Copilot"),
         vec![
             "sum of divisors".to_string(),
-            "highly_composite".to_string(),
+            "highly composite".to_string(),
         ],
         vec![
             NaiveDate::from_ymd_opt(2025, 2, 3).unwrap(),

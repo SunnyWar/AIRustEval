@@ -121,7 +121,12 @@ fn get_fun_results(
     modules.iter().enumerate().skip(1).for_each(|(_i, module)| {
         for (j, function) in module.functions.iter().enumerate() {
             let mod_result = common::run_for_duration(*function, input1, input2, fun_duration);
-            let speedup = mod_result.1 / baseline_result.1;
+
+            let speedup = if baseline_result.1 > 0.0 {
+                mod_result.1 / baseline_result.1
+            } else {
+                0.0  // Or handle this error case differently
+            };
 
             if mod_result.0 == 0 {
                 results.push((
