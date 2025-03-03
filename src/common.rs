@@ -10,6 +10,7 @@ type FnAITest = fn(&str, &str) -> usize;
 type FnAITest2 = fn(u64) -> u64;
 
 #[derive(Copy, Clone, PartialEq, Debug)]
+#[allow(dead_code)]
 pub enum AICodeGenStatus {
     Ok,
     CompileError,

@@ -143,6 +143,7 @@ pub fn sum_of_divisors(n: u64) -> u64 {
 }
 
 #[inline(never)]
+#[allow(clippy::manual_div_ceil)]
 pub fn count_primes(n: u64) -> u64 {
     if n < 2 {
         return 0;

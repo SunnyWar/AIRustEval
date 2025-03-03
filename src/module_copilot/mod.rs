@@ -93,6 +93,7 @@ pub fn levenshtein_distance(s: &str, t: &str) -> usize {
 }
 
 #[inline(never)]
+#[allow(clippy::needless_range_loop)]
 pub fn levenshtein_distance2(s: &str, t: &str) -> usize {
     let m = s.len();
     let n = t.len();

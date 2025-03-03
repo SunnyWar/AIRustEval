@@ -18,6 +18,7 @@ pub fn get_candidates() -> CandidateInfo {
 }
 
 #[inline(never)]
+#[allow(clippy::needless_range_loop)]
 pub fn levenshtein_distance(s: &str, t: &str) -> usize {
     if s.is_empty() {
         return t.len();
