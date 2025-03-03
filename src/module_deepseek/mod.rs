@@ -247,6 +247,7 @@ pub fn fibonacci(n: u64) -> u64 {
 
 // IncorrectResult
 #[inline(never)]
+#[allow(unused_variables)]
 pub fn highly_composite(n: u64) -> u64 {
     0
 }

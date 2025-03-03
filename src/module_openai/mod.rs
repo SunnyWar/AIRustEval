@@ -2,6 +2,7 @@ use chrono::NaiveDate;
 
 use crate::common::AICodeGenStatus;
 use crate::common::CandidateInfo;
+use crate::common::CandidateInfo2;
 
 // found here: https://chatgpt.com/
 // version can be found prompting: "what version are you?"
@@ -20,6 +21,24 @@ pub fn get_candidates() -> CandidateInfo {
         ],
         vec![AICodeGenStatus::Ok, AICodeGenStatus::Ok],
         vec![levenshtein_distance, levenshtein_distance2],
+    )
+}
+
+pub fn get_candidates2() -> CandidateInfo2 {
+    CandidateInfo2::new(
+        String::from("ChatGPT, version 2"),
+        vec![
+            "sum of divisors".to_string(),
+        ],
+        vec![
+            NaiveDate::from_ymd_opt(2025, 2, 3).unwrap(),
+        ],
+        vec![
+            AICodeGenStatus::Ok,
+        ],
+        vec![
+            sum_of_divisors,
+        ],
     )
 }
 

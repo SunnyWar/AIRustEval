@@ -76,6 +76,7 @@ fn main() {
         module_baseline::get_candidates2(),
         module_copilot::get_candidates2(),
         module_deepseek::get_candidates2(),
+        module_openai::get_candidates2(),
     ];
 
     let mut results2 = Vec::new();

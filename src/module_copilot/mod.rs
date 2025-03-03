@@ -55,6 +55,7 @@ pub fn get_candidates2() -> CandidateInfo2 {
 }
 
 #[inline(never)]
+#[allow(clippy::all)]
 pub fn levenshtein_distance(s: &str, t: &str) -> usize {
     let m = s.len();
     let n = t.len();
@@ -128,6 +129,7 @@ pub fn levenshtein_distance2(s: &str, t: &str) -> usize {
 }
 
 #[inline(never)]
+#[allow(unused_variables)]
 pub fn levenshtein_distance3(s: &str, t: &str) -> usize {
     let m = s.len();
     let n = t.len();
