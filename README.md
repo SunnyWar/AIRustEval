@@ -45,17 +45,19 @@ that AI's find difficul to optimize.
 
 ## Results to date:
 
-| AI Engine          | Function Name         | Date       | Status            | Result | Time (ns) | Speedup |
-|--------------------|-----------------------|------------|-------------------|--------|-----------|---------|
-| watson             | levenshstein distance | 2025-01-10 | AIRefusedToAnswer | 0      | 0         | none    |
-| Baseline           | levenshstein distance | 2025-01-02 | Ok                | 305    | 20405700  | -----   |
-| syntha.ai          | levenshstein distance | 2025-01-02 | Ok                | 305    | 20164500  | 1.0x    |
-| Microsoft Copilot  | levenshstein distance | 2025-01-13 | Ok                | 305    | 931300    | 21.9x   |
-| deepseek V3        | levenshstein distance | 2025-01-25 | Ok                | 305    | 912800    | 22.4x   |
-| Microsoft Copilot  | levenshstein distance | 2025-01-25 | Ok                | 305    | 334000    | 61.1x   |
-| ChatGPT, version 2 | levenshstein distance | 2025-01-02 | Ok                | 305    | 328800    | 62.1x   |
-| Microsoft Copilot  | levenshstein distance | 2025-01-02 | Ok                | 305    | 287700    | 70.9x   |
-| ChatGPT, version 2 | levenshstein distance | 2025-01-25 | Ok                | 305    | 281300    | 72.5x   |
-| Grock 2            | levenshstein distance | 2025-01-08 | Ok                | 305    | 268700    | 75.9x   |
-| gemini 2.0 Flash   | levenshstein distance | 2025-01-02 | Ok                | 305    | 267300    | 76.3x   |
-| claude 3.5 Sonnet  | levenshstein distance | 2025-01-02 | Ok                | 305    | 265300    | 76.9x   |
+| AI Engine          | Date       | Status            | Result | Iter/Sec | Speedup |
+|--------------------|------------|-------------------|--------|----------|---------|
+| watson             | 2025-01-10 | AIRefusedToAnswer | 0      | 0.00     | none    |
+| syntha.ai          | 2025-01-02 | Ok                | 305    | 29.62    | 0.6x    |
+| Baseline           | 2025-01-02 | Ok                | 305    | 48.73    | -----   |
+| Microsoft Copilot  | 2025-01-13 | Ok                | 305    | 613.58   | 12.6x   |
+| Microsoft Copilot  | 2025-01-25 | Ok                | 305    | 1690.15  | 34.7x   |
+| ChatGPT, version 2 | 2025-01-02 | Ok                | 305    | 1769.60  | 36.3x   |
+| claude 3.5 Sonnet  | 2025-01-02 | Ok                | 305    | 1935.41  | 39.7x   |
+| ChatGPT, version 2 | 2025-01-25 | Ok                | 305    | 1938.75  | 39.8x   |
+| deepseek R1        | 2025-01-25 | Ok                | 305    | 2053.37  | 42.1x   |
+| gemini 2.0 Flash   | 2025-01-02 | Ok                | 305    | 2083.08  | 42.8x   |
+| Grock 2            | 2025-01-08 | Ok                | 305    | 2096.83  | 43.0x   |
+| Microsoft Copilot  | 2025-01-02 | Ok                | 305    | 2535.17  | 52.0x   |
+
+
