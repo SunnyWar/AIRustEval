@@ -94,12 +94,10 @@ where
     let duration = Duration::new(duration_sec, 0);
     let start_time = Instant::now();
     let mut run_count = 0;
-    let mut total_result = 0;
     let mut result = 0;
 
     while Instant::now().duration_since(start_time) < duration {
         result = f(input1, input2);
-        total_result += result;
         run_count += 1;
         let result_cell = UnsafeCell::new(result);
         unsafe {
@@ -118,12 +116,10 @@ where
     let duration = Duration::new(duration_sec, 0);
     let start_time = Instant::now();
     let mut run_count = 0;
-    let mut total_result = 0;
     let mut result = 0;
 
     while Instant::now().duration_since(start_time) < duration {
         result = f(input);
-        total_result += result;
         run_count += 1;
         let result_cell = UnsafeCell::new(result);
         unsafe {
@@ -157,7 +153,7 @@ pub fn print_sorted_results(
             .push(result);
     }
 
-    for (function_name, mut function_results) in grouped_results {
+    for (function_name, function_results) in grouped_results {
         let mut zero_time_results = vec![];
         let mut non_zero_time_results = vec![];
 
@@ -225,7 +221,7 @@ pub fn print_sorted_results2(
             .push(result);
     }
 
-    for (function_name, mut function_results) in grouped_results {
+    for (function_name, function_results) in grouped_results {
         let mut zero_time_results = vec![];
         let mut non_zero_time_results = vec![];
 
