@@ -27,18 +27,10 @@ pub fn get_candidates() -> CandidateInfo {
 pub fn get_candidates2() -> CandidateInfo2 {
     CandidateInfo2::new(
         String::from("ChatGPT, version 2"),
-        vec![
-            "sum of divisors".to_string(),
-        ],
-        vec![
-            NaiveDate::from_ymd_opt(2025, 2, 3).unwrap(),
-        ],
-        vec![
-            AICodeGenStatus::Ok,
-        ],
-        vec![
-            sum_of_divisors,
-        ],
+        vec!["sum of divisors".to_string()],
+        vec![NaiveDate::from_ymd_opt(2025, 2, 3).unwrap()],
+        vec![AICodeGenStatus::Ok],
+        vec![sum_of_divisors],
     )
 }
 

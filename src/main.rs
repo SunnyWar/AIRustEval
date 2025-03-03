@@ -77,6 +77,7 @@ fn main() {
         module_copilot::get_candidates2(),
         module_deepseek::get_candidates2(),
         module_openai::get_candidates2(),
+        module_claude::get_candidates2(),
     ];
 
     let mut results2 = Vec::new();
@@ -126,7 +127,7 @@ fn get_fun_results(
             let speedup = if baseline_result.1 > 0.0 {
                 mod_result.1 / baseline_result.1
             } else {
-                0.0  // Or handle this error case differently
+                0.0 // Or handle this error case differently
             };
 
             if mod_result.0 == 0 {

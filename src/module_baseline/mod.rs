@@ -54,6 +54,7 @@ pub fn get_candidates2() -> CandidateInfo2 {
 
 #[inline(never)]
 #[allow(clippy::needless_range_loop)]
+// You are a highly skilled Rust developer. Your task is to optimize the following Rust function for maximum speed and efficiency. The code will run on a x86-x64 system with an AMD Ryzen 7 processor. Readability of the code is not important. Please provide the optimized code. Here is the function that needs optimization:
 pub fn levenshtein_distance(s: &str, t: &str) -> usize {
     let m = s.len();
     let n = t.len();
@@ -96,6 +97,7 @@ pub fn levenshtein_distance(s: &str, t: &str) -> usize {
 /// Returns the sum of all divisors of the given number `n`.
 /// Naive implementation iterates up to `n`.
 #[inline(never)]
+// You are a highly skilled Rust developer. Your task is to optimize the following Rust function for maximum speed and efficiency. The code will run on a x86-x64 system with an AMD Ryzen 7 processor. Readability of the code is not important. Please provide the optimized code. Here is the function that needs optimization:
 pub fn sum_of_divisors(n: u64) -> u64 {
     (1..=n).filter(|&i| n % i == 0).sum()
 }
@@ -103,6 +105,7 @@ pub fn sum_of_divisors(n: u64) -> u64 {
 /// Counts the number of prime numbers less than `n`.
 /// Naive implementation checks every number for primality.
 #[inline(never)]
+// You are a highly skilled Rust developer. Your task is to optimize the following Rust function for maximum speed and efficiency. The code will run on a x86-x64 system with an AMD Ryzen 7 processor. Readability of the code is not important. Please provide the optimized code. Here is the function that needs optimization:
 pub fn count_primes(n: u64) -> u64 {
     (2..n).filter(|&x| is_prime(x)).count() as u64
 }
@@ -123,6 +126,7 @@ fn is_prime(num: u64) -> bool {
 /// Computes the nth Fibonacci number.
 /// Naive implementation uses recursion.
 #[inline(never)]
+// You are a highly skilled Rust developer. Your task is to optimize the following Rust function for maximum speed and efficiency. The code will run on a x86-x64 system with an AMD Ryzen 7 processor. Readability of the code is not important. Please provide the optimized code. Here is the function that needs optimization:
 pub fn fibonacci(n: u64) -> u64 {
     match n {
         0 => 0,
@@ -134,6 +138,7 @@ pub fn fibonacci(n: u64) -> u64 {
 /// Finds the first highly composite number greater than `n`.
 /// A naive implementation checks every number up to n, counting divisors for each.
 #[inline(never)]
+// You are a highly skilled Rust developer. Your task is to optimize the following Rust function for maximum speed and efficiency. The code will run on a x86-x64 system with an AMD Ryzen 7 processor. Readability of the code is not important. Please provide the optimized code. Here is the function that needs optimization:
 pub fn highly_composite(n: u64) -> u64 {
     (n + 1..)
         .find(|&x| count_divisors(x) > count_divisors(n))
@@ -147,6 +152,7 @@ fn count_divisors(n: u64) -> u64 {
 
 /// Helper function to calculate the sum of proper divisors.
 #[inline(never)]
+// You are a highly skilled Rust developer. Your task is to optimize the following Rust function for maximum speed and efficiency. The code will run on a x86-x64 system with an AMD Ryzen 7 processor. Readability of the code is not important. Please provide the optimized code. Here is the function that needs optimization:
 pub fn sum_of_proper_divisors(n: u64) -> u64 {
     (1..n).filter(|&i| n % i == 0).sum()
 }
