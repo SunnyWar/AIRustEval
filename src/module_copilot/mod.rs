@@ -43,16 +43,32 @@ pub fn get_candidates2() -> CandidateInfo2 {
         String::from("Microsoft Copilot"),
         vec![
             "sum of divisors".to_string(),
-            "highly composite".to_string(),
             "count of primes".to_string(),
+            "fibonacci".to_string(),
+            "highly composite".to_string(),
+            "sum of proper divisors".to_string(),
         ],
         vec![
-            NaiveDate::from_ymd_opt(2025, 2, 3).unwrap(),
-            NaiveDate::from_ymd_opt(2025, 2, 4).unwrap(),
             NaiveDate::from_ymd_opt(2025, 3, 3).unwrap(),
+            NaiveDate::from_ymd_opt(2025, 2, 3).unwrap(),
+            NaiveDate::from_ymd_opt(2025, 3, 4).unwrap(),
+            NaiveDate::from_ymd_opt(2025, 2, 4).unwrap(),
+            NaiveDate::from_ymd_opt(2025, 3, 4).unwrap(),
         ],
-        vec![AICodeGenStatus::Ok, AICodeGenStatus::Ok, AICodeGenStatus::Ok],
-        vec![sum_of_divisors, highly_composite, count_primes],
+        vec![
+            AICodeGenStatus::Ok,
+            AICodeGenStatus::Ok,
+            AICodeGenStatus::Ok,
+            AICodeGenStatus::Ok,
+            AICodeGenStatus::Ok,
+        ],
+        vec![
+            sum_of_divisors,
+            highly_composite,
+            fibonacci,
+            count_primes,
+            sum_of_proper_divisors,
+        ],
     )
 }
 
@@ -230,4 +246,54 @@ pub fn count_primes(n: u64) -> u64 {
     }
 
     sieve.iter().filter(|&&is_prime| is_prime).count() as u64
+}
+
+#[inline(never)]
+pub fn fibonacci(n: u64) -> u64 {
+    fib(n).0
+}
+
+#[inline(always)]
+fn fib(n: u64) -> (u64, u64) {
+    if n == 0 {
+        (0, 1)
+    } else {
+        let (a, b) = fib(n >> 1);
+        let c = a * ((b << 1).wrapping_sub(a));
+        let d = a * a + b * b;
+        if n & 1 == 0 { (c, d) } else { (d, c + d) }
+    }
+}
+
+#[inline(never)]
+pub fn sum_of_proper_divisors(n: u64) -> u64 {
+    if n < 2 {
+        return 0;
+    }
+    // All numbers have 1 as a proper divisor.
+    let mut s = 1;
+    // Compute floor(sqrt(n)) using a floating-point conversion.
+    let r = (n as f64).sqrt() as u64;
+    if n & 1 == 1 {
+        // n is odd: Only odd i can divide an odd number.
+        let mut i = 3;
+        while i <= r {
+            if n % i == 0 {
+                let j = n / i;
+                s += if i == j { i } else { i + j };
+            }
+            i += 2;
+        }
+    } else {
+        // n is even: Check every candidate.
+        let mut i = 2;
+        while i <= r {
+            if n % i == 0 {
+                let j = n / i;
+                s += if i == j { i } else { i + j };
+            }
+            i += 1;
+        }
+    }
+    s
 }

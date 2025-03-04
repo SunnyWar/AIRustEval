@@ -24,6 +24,11 @@ pub fn get_candidates() -> CandidateInfo {
     )
 }
 
+//"sum of divisors".to_string(),
+//"count of primes".to_string(),
+//"fibonacci".to_string(),
+//"highly composite".to_string(),
+//"sum of proper divisors".to_string(),
 pub fn get_candidates2() -> CandidateInfo2 {
     CandidateInfo2::new(
         String::from("ChatGPT, version 2"),

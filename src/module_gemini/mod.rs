@@ -17,6 +17,12 @@ pub fn get_candidates() -> CandidateInfo {
     )
 }
 
+//"sum of divisors".to_string(),
+//"count of primes".to_string(),
+//"fibonacci".to_string(),
+//"highly composite".to_string(),
+//"sum of proper divisors".to_string(),
+
 #[inline(never)]
 #[allow(clippy::needless_range_loop)]
 pub fn levenshtein_distance(s: &str, t: &str) -> usize {
