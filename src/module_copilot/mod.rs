@@ -44,13 +44,15 @@ pub fn get_candidates2() -> CandidateInfo2 {
         vec![
             "sum of divisors".to_string(),
             "highly composite".to_string(),
+            "count of primes".to_string(),
         ],
         vec![
             NaiveDate::from_ymd_opt(2025, 2, 3).unwrap(),
             NaiveDate::from_ymd_opt(2025, 2, 4).unwrap(),
+            NaiveDate::from_ymd_opt(2025, 3, 3).unwrap(),
         ],
-        vec![AICodeGenStatus::Ok, AICodeGenStatus::Ok],
-        vec![sum_of_divisors, highly_composite],
+        vec![AICodeGenStatus::Ok, AICodeGenStatus::Ok, AICodeGenStatus::Ok],
+        vec![sum_of_divisors, highly_composite, count_primes],
     )
 }
 
@@ -204,4 +206,28 @@ fn count_divisors(n: u64) -> u64 {
     }
 
     count
+}
+
+#[inline(never)]
+pub fn count_primes(n: u64) -> u64 {
+    if n <= 2 {
+        return 0;
+    }
+    let n = n as usize;
+    let mut sieve = vec![true; n];
+    sieve[0] = false;
+    sieve[1] = false;
+    let sqrt_n = (n as f64).sqrt() as usize + 1;
+
+    for i in 2..sqrt_n {
+        if sieve[i] {
+            let mut j = i * i;
+            while j < n {
+                sieve[j] = false;
+                j += i;
+            }
+        }
+    }
+
+    sieve.iter().filter(|&&is_prime| is_prime).count() as u64
 }
