@@ -78,6 +78,7 @@ fn main() {
         module_deepseek::get_candidates2(),
         module_openai::get_candidates2(),
         module_claude::get_candidates2(),
+        module_gemini::get_candidates2(),
     ];
 
     let mut results2 = Vec::new();

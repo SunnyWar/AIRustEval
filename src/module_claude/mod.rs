@@ -37,7 +37,7 @@ pub fn get_candidates2() -> CandidateInfo2 {
         vec![
             AICodeGenStatus::Ok,
             AICodeGenStatus::Ok,
-            AICodeGenStatus::SecondTryOk,
+            AICodeGenStatus::IncorrectResult,
             AICodeGenStatus::Ok,
             AICodeGenStatus::Ok,
         ],

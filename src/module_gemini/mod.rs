@@ -2,6 +2,7 @@ use chrono::NaiveDate;
 
 use crate::common::AICodeGenStatus;
 use crate::common::CandidateInfo;
+use crate::common::CandidateInfo2;
 
 // found here: https://gemini.google.com/
 // version is listed on page and can the selected
@@ -14,6 +15,26 @@ pub fn get_candidates() -> CandidateInfo {
         vec![NaiveDate::from_ymd_opt(2025, 1, 2).unwrap()],
         vec![AICodeGenStatus::Ok],
         vec![levenshtein_distance],
+    )
+}
+
+pub fn get_candidates2() -> CandidateInfo2 {
+    CandidateInfo2::new(
+        String::from("gemini 2.5 Pro"),
+        vec![
+            "sum of divisors".to_string(),
+        ],
+        vec![
+            NaiveDate::from_ymd_opt(2025, 4, 1).unwrap(),
+
+        ],
+        vec![
+            AICodeGenStatus::Ok,
+        ],
+        vec![
+            sum_of_divisors,
+
+        ],
     )
 }
 
@@ -54,4 +75,55 @@ pub fn levenshtein_distance(s: &str, t: &str) -> usize {
     }
 
     v0[n]
+}
+
+#[inline(never)]
+pub fn sum_of_divisors(n: u64) -> u64 {
+    // Handle edge cases explicitly for potential minor speedup
+    // and correctness. Sum of divisors of 0 is often considered 0.
+    if n == 0 {
+        return 0;
+    }
+    // Sum of divisors of 1 is 1.
+    if n == 1 {
+        return 1;
+    }
+
+    let mut sum: u64 = 0;
+
+    // Calculate the integer square root.
+    // Using f64::sqrt is generally fast on x86-64.
+    // Note: For extremely large u64 values near the limit, f64 precision
+    // might become an issue, but it's highly unlikely for typical inputs.
+    // An integer-only sqrt algorithm could be used if this becomes a bottleneck
+    // or precision issue in very specific edge cases, but adds complexity.
+    let sqrt_n = (n as f64).sqrt() as u64;
+
+    // Iterate from 1 up to (and including) the square root of n.
+    // Using a simple loop often allows the compiler to optimize better
+    // than iterator chains for tight numerical code.
+    for i in 1..=sqrt_n {
+        // Check if i is a divisor
+        if n % i == 0 {
+            // i is a divisor. Calculate its pair.
+            let pair = n / i;
+
+            // If i * i == n, then i is the square root, and i == pair.
+            // Add it only once to avoid double counting.
+            if i == pair {
+                // Using checked_add for safety against potential overflow,
+                // though for sum-of-divisors, overflow is less common unless n is huge.
+                // If *maximum* speed is needed and overflow can be ruled out or ignored,
+                // plain `sum += i` could be used, but checked_add is safer with
+                // minimal performance cost on modern CPUs. Let's assume safety is still desired.
+                sum = sum.checked_add(i).expect("Overflow occurred");
+            } else {
+                // i and pair are distinct divisors. Add both.
+                sum = sum.checked_add(i).expect("Overflow occurred");
+                sum = sum.checked_add(pair).expect("Overflow occurred");
+            }
+        }
+    }
+
+    sum
 }
